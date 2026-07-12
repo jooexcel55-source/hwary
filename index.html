@@ -390,11 +390,11 @@ const NOTIF_SERVER='https://gw-notif-server-production.up.railway.app';
 function pushNotif(tUid,icon,text,linkObj){
   if(!tUid||tUid===uid)return;
   const notifKey='n_'+tUid+'_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);
-  set(ref(db,'rb_notifs/'+tUid+'/'+notifKey),{ts:Date.now(),icon,text,unread:true,link:JSON.stringify(linkObj||{type:'home'})});
+  set(ref(db,'rb_notifs/'+tUid+'/'+notifKey),{ts:Date.now(),icon,text,unread:true,link:JSON.stringify(linkObj||{type:'home'})}).catch(e=>console.error('pushNotif write failed:',e));
   get(ref(db,'rb_users/'+tUid+'/fcmToken')).then(s=>{
     const token=s.val();if(!token)return;
-    fetch(NOTIF_SERVER+'/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token,title:icon+' رزق البنات',body:text})}).catch(()=>{});
-  });
+    fetch(NOTIF_SERVER+'/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token,title:icon+' رزق البنات',body:text})}).catch(e=>console.error('push send failed:',e));
+  }).catch(e=>console.error('fcmToken read failed:',e));
 }
 window.RB.pushNotif=pushNotif;
 async function requestNotifPermission(){
@@ -422,7 +422,25 @@ if('serviceWorker' in navigator){
   });
 }
 function listenNotifs(){
-  onValue(ref(db,'rb_notifs/'+uid),snap=>{let unread=0;snap.forEach(s=>{if(s.val()?.unread)unread++;});$('ndot').style.display=unread>0?'block':'none';});
+  let seen=new Set(JSON.parse(localStorage.getItem('rb_seen_notifs_'+uid)||'[]'));
+  onValue(ref(db,'rb_notifs/'+uid),snap=>{
+    let unread=0;
+    snap.forEach(s=>{
+      const v=s.val();
+      if(v&&v.unread){
+        unread++;
+        if(!seen.has(s.key)){
+          seen.add(s.key);
+          toast((v.icon||'🔔')+' '+v.text);
+          if('Notification' in window&&Notification.permission==='granted'){
+            try{new Notification((v.icon||'🔔')+' رزق البنات',{body:v.text});}catch(e){}
+          }
+        }
+      }
+    });
+    localStorage.setItem('rb_seen_notifs_'+uid,JSON.stringify([...seen]));
+    $('ndot').style.display=unread>0?'block':'none';
+  });
 }
 
 /* ===================== محرّك متصفح الكروت العام ===================== */
