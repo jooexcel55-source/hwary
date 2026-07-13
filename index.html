@@ -192,7 +192,7 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
 
 <header>
   <div class="logo"><div class="mark">🏠</div>رزق البنات</div>
-  <div class="hright"><button class="icbtn" id="notifBtn">🔔<span class="ndot" id="ndot"></span></button></div>
+  <div class="hright"><button class="icbtn" id="notifBtn">HwArY<span class="ndot" id="ndot"></span></button></div>
 </header>
 
 <nav class="tnav">
@@ -387,6 +387,10 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
     <div class="treasury-hero">
       <div class="th-lbl">💰 رصيد الخزينة الحالي</div>
       <div class="th-num" id="treasuryBalanceBig">0 جنيه</div>
+    </div>
+    <div class="card">
+      <div class="stitle">📊 تفاصيل حركة الخزينة</div>
+      <div id="treasuryBreakdown"></div>
     </div>
     <div class="subnav">
       <button class="subtab active" data-sub="recv">📥 استلام نقدية</button>
@@ -1019,24 +1023,57 @@ makeBrowser({
     ${r.notes?`<div class="bfield"><span class="bl">🗒️ ملاحظات</span><span class="bv">${safeA(r.notes)}</span></div>`:''}`
 });
 
-/* ===== رصيد الخزينة الإجمالي ===== */
+/* ===== رصيد الخزينة الإجمالي (بنفس معادلة برنامج الأكسس) ===== */
 function refreshTreasuryBalance(){
   Promise.all([
     get(ref(db,'rb_treasury_info')),
     get(ref(db,'rb_cash_receipts')),
-    get(ref(db,'rb_cash_payments'))
-  ]).then(([tSnap,rSnap,pSnap])=>{
+    get(ref(db,'rb_cash_payments')),
+    get(ref(db,'rb_installment_collections')),
+    get(ref(db,'rb_installment_payments')),
+    get(ref(db,'rb_sales_invoices')),
+    get(ref(db,'rb_purchase_invoices'))
+  ]).then(([tSnap,rSnap,pSnap,icSnap,ipSnap,siSnap,piSnap])=>{
     const opening=parseFloat((tSnap.val()||{}).openingBalance)||0;
-    const receipts=rSnap.exists()?Object.values(rSnap.val()).reduce((s,r)=>s+(parseFloat(r.amount)||0),0):0;
-    const payments=pSnap.exists()?Object.values(pSnap.val()).reduce((s,r)=>s+(parseFloat(r.amount)||0),0):0;
-    const bal=opening+receipts-payments;
+    const cashIn=rSnap.exists()?Object.values(rSnap.val()).reduce((s,r)=>s+(parseFloat(r.amount)||0),0):0;
+    const cashOut=pSnap.exists()?Object.values(pSnap.val()).reduce((s,r)=>s+(parseFloat(r.amount)||0),0):0;
+    const instCollIn=icSnap.exists()?Object.values(icSnap.val()).reduce((s,r)=>s+(parseFloat(r.amount)||0),0):0;
+    const instPayOut=ipSnap.exists()?Object.values(ipSnap.val()).reduce((s,r)=>s+(parseFloat(r.amount)||0),0):0;
+    // تحصيلات المبيعات = المبلغ المدفوع فعليًا وقت البيع (مش إجمالي الفاتورة)
+    const salesPaidIn=siSnap.exists()?Object.values(siSnap.val()).reduce((s,inv)=>s+(parseFloat(inv.paid)||0),0):0;
+    // مصروفات المشتروات = المبلغ المدفوع فعليًا وقت الشراء
+    const purchPaidOut=piSnap.exists()?Object.values(piSnap.val()).reduce((s,inv)=>s+(parseFloat(inv.paid)||0),0):0;
+
+    const totalIn=cashIn+instCollIn+salesPaidIn;
+    const totalOut=cashOut+instPayOut+purchPaidOut;
+    const bal=opening+totalIn-totalOut;
+
     $('treasuryBalanceBig').textContent=fmtMoney(bal)+' جنيه';
     $('statTreasury').textContent=fmtMoney(bal);
+
+    const bd=$('treasuryBreakdown');
+    if(bd){
+      bd.innerHTML=`
+        <div class="bfield"><span class="bl">💰 رصيد أول الفترة</span><span class="bv">${fmtMoney(opening)}</span></div>
+        <div class="bfield"><span class="bl">📥 الواردات (استلام نقدية)</span><span class="bv">${fmtMoney(cashIn)}</span></div>
+        <div class="bfield"><span class="bl">💳 تحصيلات الأقساط</span><span class="bv">${fmtMoney(instCollIn)}</span></div>
+        <div class="bfield"><span class="bl">🧾 تحصيلات المبيعات (المدفوع)</span><span class="bv">${fmtMoney(salesPaidIn)}</span></div>
+        <div class="bfield" style="border-top:2px solid var(--success);"><span class="bl">✅ إجمالي الإيرادات</span><span class="bv" style="color:var(--success);">${fmtMoney(totalIn)}</span></div>
+        <div class="bfield"><span class="bl">📤 المصروفات (صرف نقدية)</span><span class="bv">${fmtMoney(cashOut)}</span></div>
+        <div class="bfield"><span class="bl">💳 تسديدات الأقساط</span><span class="bv">${fmtMoney(instPayOut)}</span></div>
+        <div class="bfield"><span class="bl">🧾 مصروفات المشتروات (المدفوع)</span><span class="bv">${fmtMoney(purchPaidOut)}</span></div>
+        <div class="bfield" style="border-top:2px solid var(--danger);"><span class="bl">❌ إجمالي المصروفات</span><span class="bv" style="color:var(--danger);">${fmtMoney(totalOut)}</span></div>
+        <div class="bfield" style="border-top:2px solid var(--primary-dk);"><span class="bl">💰 الرصيد الحالي</span><span class="bv" style="color:var(--primary-dk);">${fmtMoney(bal)}</span></div>`;
+    }
   });
 }
 onValue(ref(db,'rb_cash_receipts'),()=>refreshTreasuryBalance());
 onValue(ref(db,'rb_cash_payments'),()=>refreshTreasuryBalance());
 onValue(ref(db,'rb_treasury_info'),()=>refreshTreasuryBalance());
+onValue(ref(db,'rb_installment_collections'),()=>refreshTreasuryBalance());
+onValue(ref(db,'rb_installment_payments'),()=>refreshTreasuryBalance());
+onValue(ref(db,'rb_sales_invoices'),()=>refreshTreasuryBalance());
+onValue(ref(db,'rb_purchase_invoices'),()=>refreshTreasuryBalance());
 
 /* ===== كشوف الحساب بين تاريخين ===== */
 function populateStmtSelect(selectId,dataObj){
@@ -1311,6 +1348,14 @@ $('doImport').addEventListener('click',async()=>{
         sellerName:pick(b,'أسم البائع','اسم البائع'),taxRegNo:pick(b,'رقم التسجيل الضريبي')
       };
     }
+
+    statusEl.textContent='🗑️ جاري مسح البيانات القديمة...';
+    const dataPaths=[
+      'rb_customers','rb_suppliers','rb_items','rb_sales_invoices','rb_purchase_invoices',
+      'rb_warehouses','rb_treasury_info','rb_cash_receipts','rb_cash_payments',
+      'rb_installment_collections','rb_installment_payments','rb_transfer_vouchers','rb_basic_info'
+    ];
+    for(const p of dataPaths){await remove(ref(db,p));}
 
     statusEl.textContent='⏳ جاري الرفع لقاعدة البيانات...';
     await set(ref(db,'rb_customers'),customersObj);
