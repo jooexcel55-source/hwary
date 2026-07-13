@@ -38,9 +38,9 @@ header{background:linear-gradient(180deg,var(--primary),var(--primary-dk));posit
 
 .tnav{position:fixed;top:var(--nav-h);left:0;right:0;z-index:999;background:var(--surface);border-bottom:1px solid var(--border);display:flex;height:var(--tab-h);box-shadow:0 4px 10px rgba(43,31,26,.04);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
 .tnav::-webkit-scrollbar{display:none;}
-.tni{display:flex;flex:0 0 76px;flex-direction:column;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;position:relative;color:var(--muted);font-family:'Cairo',sans-serif;transition:color .15s ease;}
-.tni-icon{font-size:19px;line-height:1;}
-.tni-label{font-size:9.5px;font-weight:700;margin-top:3px;white-space:nowrap;}
+.tni{display:flex;flex:1 1 0;min-width:0;flex-direction:column;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;position:relative;color:var(--muted);font-family:'Cairo',sans-serif;transition:color .15s ease;padding:0 2px;}
+.tni-icon{font-size:16px;line-height:1;}
+.tni-label{font-size:8px;font-weight:700;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
 .tni::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--primary);opacity:0;border-radius:3px 3px 0 0;transition:opacity .15s;}
 .tni.active{color:var(--primary);}
 .tni.active::after{opacity:1;}
@@ -87,6 +87,19 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
 
 .empty-state{text-align:center;padding:36px 20px;color:var(--muted);}
 .empty-state .ei{font-size:34px;margin-bottom:8px;}
+
+/* ===== تبديل نوع العرض (كروت / جدول) ===== */
+.view-toggle{display:flex;gap:6px;margin-bottom:10px;}
+.vt-btn{flex:1;padding:8px 6px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;border-radius:9px;cursor:pointer;transition:all .15s;}
+.vt-btn.active{border-color:var(--primary);background:var(--primary);color:#fff;}
+
+/* ===== جدول زي الإكسل ===== */
+.grid-wrap{overflow-x:auto;border:1.5px solid var(--border);border-radius:12px;background:var(--surface);max-height:65vh;overflow-y:auto;}
+.excel-table{width:100%;border-collapse:collapse;font-size:11.5px;white-space:nowrap;}
+.excel-table th{background:var(--primary-dk);color:#fff;padding:8px 10px;position:sticky;top:0;font-weight:900;border:1px solid rgba(255,255,255,.15);text-align:center;z-index:2;}
+.excel-table td{padding:7px 10px;border:1px solid var(--border);text-align:center;}
+.excel-table tr:nth-child(even) td{background:var(--surface2);}
+.excel-table tr:hover td{background:#efe7f9;}
 
 /* ===== متصفح الكروت (تكويد/فواتير) ===== */
 .browser-search{position:relative;margin-bottom:10px;}
@@ -156,9 +169,9 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
     <div class="slogo">رزق البنات</div>
     <div class="ssub">نظام إدارة الأصناف والفواتير والخزينة</div>
     <div id="setupStep1">
-      <div style="font-size:11px;color:var(--muted);text-align:right;margin-bottom:3px;">اسمك:</div>
-      <input class="mc-input" id="sName" placeholder="اسمك...">
-      <div style="font-size:11px;color:var(--muted);text-align:right;margin-bottom:3px;">كود الدخول الخاص بيك (اختاره واحفظه):</div>
+      <div style="font-size:11px;color:var(--muted);text-align:right;margin-bottom:3px;">الاسم:</div>
+      <input class="mc-input" id="sName" placeholder="الاسم...">
+      <div style="font-size:11px;color:var(--muted);text-align:right;margin-bottom:3px;">كود الدخول الخاص بيك (اختره واحفظه):</div>
       <input class="mc-input" id="sPersonalCode" type="password" placeholder="كود خاص بيك تحفظه...">
       <button class="mc-btn" style="width:100%;margin-top:4px;" id="sNext1">إنشاء حساب جديد ←</button>
       <div style="text-align:center;margin:14px 0 8px;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;">
@@ -166,10 +179,10 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
       </div>
       <button class="mc-btn outline" style="width:100%;" id="sLoginBtn">🔑 دخول بحساب موجود</button>
       <div id="loginSection" style="display:none;margin-top:12px;text-align:right;">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:3px;">اسمك:</div>
-        <input class="mc-input" id="loginName" placeholder="اسمك...">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:3px;">كودك الخاص:</div>
-        <input class="mc-input" id="loginCode" type="password" placeholder="كودك الخاص...">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:3px;">الاسم:</div>
+        <input class="mc-input" id="loginName" placeholder="الاسم...">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:3px;">الكود الخاص:</div>
+        <input class="mc-input" id="loginCode" type="password" placeholder="الكود الخاص...">
         <div id="loginErr" style="font-size:11px;color:var(--danger);margin-bottom:6px;display:none;"></div>
         <button class="mc-btn gold" style="width:100%;" id="doLogin">دخول 🔑</button>
       </div>
@@ -188,7 +201,6 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
   <button class="tni" data-pg="invoices"><span class="tni-icon">🧾</span><span class="tni-label">الفواتير</span></button>
   <button class="tni" data-pg="treasury"><span class="tni-icon">💰</span><span class="tni-label">الخزينة</span></button>
   <button class="tni" data-pg="reports"><span class="tni-icon">📊</span><span class="tni-label">كشف حساب</span></button>
-  <button class="tni" data-pg="itemsearch"><span class="tni-icon">🔍</span><span class="tni-label">بحث الأصناف</span></button>
   <button class="tni" data-pg="account"><span class="tni-icon">👤</span><span class="tni-label">حسابي</span></button>
 </nav>
 
@@ -197,7 +209,7 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
   <!-- ===== الرئيسية ===== -->
   <div id="pg_home" class="page active">
     <div class="hero">
-      <div class="hero-title" id="heroGreeting">أهلاً بيكِ 👋</div>
+      <div class="hero-title" id="heroGreeting">أهلاً بيك 👋</div>
       <div class="hero-sub">لوحة تحكم رزق البنات لإدارة الأصناف والفواتير والخزينة</div>
       <div class="stats-grid">
         <div class="stat-box"><div class="stat-num" id="statItems">0</div><div class="stat-lbl">صنف</div></div>
@@ -215,7 +227,7 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
       <div class="quick-btn" data-goto="account"><span class="qi">📥</span><span class="qt">تحديث البيانات</span></div>
     </div>
     <div class="stitle">🕘 آخر فواتير البيع</div>
-    <div id="recentActivity"><div class="empty-state"><div class="ei">🗂️</div><p>لسه مفيش بيانات — حدّثي البيانات من صفحة "حسابي"</p></div></div>
+    <div id="recentActivity"><div class="empty-state"><div class="ei">🗂️</div><p>لا توجد بيانات بعد — حدّث البيانات من صفحة "حسابي"</p></div></div>
   </div>
 
   <!-- ===== التكويد ===== -->
@@ -228,51 +240,79 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
     </div>
 
     <div id="sub_cust" class="subpage active">
+      <div class="view-toggle" data-viewgroup="cust">
+        <button class="vt-btn active" data-view="card">🗂️ كروت</button>
+        <button class="vt-btn" data-view="grid">📊 جدول</button>
+      </div>
       <div class="browser-search"><input class="mc-input" id="custSearch" placeholder="ابحث بالاسم أو الكود أو رقم الهاتف..."><span class="si">🔍</span></div>
       <div class="browser-counter" id="custCounter">0 من 0</div>
-      <div class="browser-stage"><div id="custCard"></div></div>
-      <div class="browser-nav">
-        <button class="mc-btn small" id="custFirst">⏮ الأول</button>
-        <button class="mc-btn small" id="custPrev">◀ السابق</button>
-        <button class="mc-btn small" id="custNext">التالي ▶</button>
-        <button class="mc-btn small" id="custLast">الأخير ⏭</button>
+      <div id="custViewCard">
+        <div class="browser-stage"><div id="custCard"></div></div>
+        <div class="browser-nav" id="custNavBtns">
+          <button class="mc-btn small" id="custFirst">⏮ الأول</button>
+          <button class="mc-btn small" id="custPrev">◀ السابق</button>
+          <button class="mc-btn small" id="custNext">التالي ▶</button>
+          <button class="mc-btn small" id="custLast">الأخير ⏭</button>
+        </div>
       </div>
+      <div id="custViewGrid" style="display:none;"><div class="grid-wrap"><div id="custGrid"></div></div></div>
     </div>
 
     <div id="sub_supp" class="subpage">
+      <div class="view-toggle" data-viewgroup="supp">
+        <button class="vt-btn active" data-view="card">🗂️ كروت</button>
+        <button class="vt-btn" data-view="grid">📊 جدول</button>
+      </div>
       <div class="browser-search"><input class="mc-input" id="suppSearch" placeholder="ابحث بالاسم أو الكود أو رقم الهاتف..."><span class="si">🔍</span></div>
       <div class="browser-counter" id="suppCounter">0 من 0</div>
-      <div class="browser-stage"><div id="suppCard"></div></div>
-      <div class="browser-nav">
-        <button class="mc-btn small" id="suppFirst">⏮ الأول</button>
-        <button class="mc-btn small" id="suppPrev">◀ السابق</button>
-        <button class="mc-btn small" id="suppNext">التالي ▶</button>
-        <button class="mc-btn small" id="suppLast">الأخير ⏭</button>
+      <div id="suppViewCard">
+        <div class="browser-stage"><div id="suppCard"></div></div>
+        <div class="browser-nav" id="suppNavBtns">
+          <button class="mc-btn small" id="suppFirst">⏮ الأول</button>
+          <button class="mc-btn small" id="suppPrev">◀ السابق</button>
+          <button class="mc-btn small" id="suppNext">التالي ▶</button>
+          <button class="mc-btn small" id="suppLast">الأخير ⏭</button>
+        </div>
       </div>
+      <div id="suppViewGrid" style="display:none;"><div class="grid-wrap"><div id="suppGrid"></div></div></div>
     </div>
 
     <div id="sub_item" class="subpage">
+      <div class="view-toggle" data-viewgroup="item">
+        <button class="vt-btn active" data-view="card">🗂️ كروت</button>
+        <button class="vt-btn" data-view="grid">📊 جدول</button>
+      </div>
       <div class="browser-search"><input class="mc-input" id="itemSearch" placeholder="ابحث بالاسم أو الكود أو التصنيف..."><span class="si">🔍</span></div>
       <div class="browser-counter" id="itemCounter">0 من 0</div>
-      <div class="browser-stage"><div id="itemCard"></div></div>
-      <div class="browser-nav">
-        <button class="mc-btn small" id="itemFirst">⏮ الأول</button>
-        <button class="mc-btn small" id="itemPrev">◀ السابق</button>
-        <button class="mc-btn small" id="itemNext">التالي ▶</button>
-        <button class="mc-btn small" id="itemLast">الأخير ⏭</button>
+      <div id="itemViewCard">
+        <div class="browser-stage"><div id="itemCard"></div></div>
+        <div class="browser-nav" id="itemNavBtns">
+          <button class="mc-btn small" id="itemFirst">⏮ الأول</button>
+          <button class="mc-btn small" id="itemPrev">◀ السابق</button>
+          <button class="mc-btn small" id="itemNext">التالي ▶</button>
+          <button class="mc-btn small" id="itemLast">الأخير ⏭</button>
+        </div>
       </div>
+      <div id="itemViewGrid" style="display:none;"><div class="grid-wrap"><div id="itemGrid"></div></div></div>
     </div>
 
     <div id="sub_wh" class="subpage">
+      <div class="view-toggle" data-viewgroup="wh">
+        <button class="vt-btn active" data-view="card">🗂️ كروت</button>
+        <button class="vt-btn" data-view="grid">📊 جدول</button>
+      </div>
       <div class="browser-search"><input class="mc-input" id="whSearch" placeholder="ابحث باسم المخزن أو الكود أو الموقع..."><span class="si">🔍</span></div>
       <div class="browser-counter" id="whCounter">0 من 0</div>
-      <div class="browser-stage"><div id="whCard"></div></div>
-      <div class="browser-nav">
-        <button class="mc-btn small" id="whFirst">⏮ الأول</button>
-        <button class="mc-btn small" id="whPrev">◀ السابق</button>
-        <button class="mc-btn small" id="whNext">التالي ▶</button>
-        <button class="mc-btn small" id="whLast">الأخير ⏭</button>
+      <div id="whViewCard">
+        <div class="browser-stage"><div id="whCard"></div></div>
+        <div class="browser-nav" id="whNavBtns">
+          <button class="mc-btn small" id="whFirst">⏮ الأول</button>
+          <button class="mc-btn small" id="whPrev">◀ السابق</button>
+          <button class="mc-btn small" id="whNext">التالي ▶</button>
+          <button class="mc-btn small" id="whLast">الأخير ⏭</button>
+        </div>
       </div>
+      <div id="whViewGrid" style="display:none;"><div class="grid-wrap"><div id="whGrid"></div></div></div>
     </div>
   </div>
 
@@ -285,39 +325,60 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
     </div>
 
     <div id="sub_sale" class="subpage active">
+      <div class="view-toggle" data-viewgroup="sale">
+        <button class="vt-btn active" data-view="card">🗂️ كروت</button>
+        <button class="vt-btn" data-view="grid">📊 جدول</button>
+      </div>
       <div class="browser-search"><input class="mc-input" id="saleSearch" placeholder="ابحث برقم الفاتورة أو اسم العميل..."><span class="si">🔍</span></div>
       <div class="browser-counter" id="saleCounter">0 من 0</div>
-      <div class="browser-stage"><div id="saleCard"></div></div>
-      <div class="browser-nav">
-        <button class="mc-btn small" id="saleFirst">⏮ الأول</button>
-        <button class="mc-btn small" id="salePrev">◀ السابق</button>
-        <button class="mc-btn small" id="saleNext">التالي ▶</button>
-        <button class="mc-btn small" id="saleLast">الأخير ⏭</button>
+      <div id="saleViewCard">
+        <div class="browser-stage"><div id="saleCard"></div></div>
+        <div class="browser-nav" id="saleNavBtns">
+          <button class="mc-btn small" id="saleFirst">⏮ الأول</button>
+          <button class="mc-btn small" id="salePrev">◀ السابق</button>
+          <button class="mc-btn small" id="saleNext">التالي ▶</button>
+          <button class="mc-btn small" id="saleLast">الأخير ⏭</button>
+        </div>
       </div>
+      <div id="saleViewGrid" style="display:none;"><div class="grid-wrap"><div id="saleGrid"></div></div></div>
     </div>
 
     <div id="sub_purch" class="subpage">
+      <div class="view-toggle" data-viewgroup="purch">
+        <button class="vt-btn active" data-view="card">🗂️ كروت</button>
+        <button class="vt-btn" data-view="grid">📊 جدول</button>
+      </div>
       <div class="browser-search"><input class="mc-input" id="purchSearch" placeholder="ابحث برقم الفاتورة أو اسم المورد..."><span class="si">🔍</span></div>
       <div class="browser-counter" id="purchCounter">0 من 0</div>
-      <div class="browser-stage"><div id="purchCard"></div></div>
-      <div class="browser-nav">
-        <button class="mc-btn small" id="purchFirst">⏮ الأول</button>
-        <button class="mc-btn small" id="purchPrev">◀ السابق</button>
-        <button class="mc-btn small" id="purchNext">التالي ▶</button>
-        <button class="mc-btn small" id="purchLast">الأخير ⏭</button>
+      <div id="purchViewCard">
+        <div class="browser-stage"><div id="purchCard"></div></div>
+        <div class="browser-nav" id="purchNavBtns">
+          <button class="mc-btn small" id="purchFirst">⏮ الأول</button>
+          <button class="mc-btn small" id="purchPrev">◀ السابق</button>
+          <button class="mc-btn small" id="purchNext">التالي ▶</button>
+          <button class="mc-btn small" id="purchLast">الأخير ⏭</button>
+        </div>
       </div>
+      <div id="purchViewGrid" style="display:none;"><div class="grid-wrap"><div id="purchGrid"></div></div></div>
     </div>
 
     <div id="sub_transfer" class="subpage">
+      <div class="view-toggle" data-viewgroup="transfer">
+        <button class="vt-btn active" data-view="card">🗂️ كروت</button>
+        <button class="vt-btn" data-view="grid">📊 جدول</button>
+      </div>
       <div class="browser-search"><input class="mc-input" id="transferSearch" placeholder="ابحث برقم الإذن..."><span class="si">🔍</span></div>
       <div class="browser-counter" id="transferCounter">0 من 0</div>
-      <div class="browser-stage"><div id="transferCard"></div></div>
-      <div class="browser-nav">
-        <button class="mc-btn small" id="transferFirst">⏮ الأول</button>
-        <button class="mc-btn small" id="transferPrev">◀ السابق</button>
-        <button class="mc-btn small" id="transferNext">التالي ▶</button>
-        <button class="mc-btn small" id="transferLast">الأخير ⏭</button>
+      <div id="transferViewCard">
+        <div class="browser-stage"><div id="transferCard"></div></div>
+        <div class="browser-nav" id="transferNavBtns">
+          <button class="mc-btn small" id="transferFirst">⏮ الأول</button>
+          <button class="mc-btn small" id="transferPrev">◀ السابق</button>
+          <button class="mc-btn small" id="transferNext">التالي ▶</button>
+          <button class="mc-btn small" id="transferLast">الأخير ⏭</button>
+        </div>
       </div>
+      <div id="transferViewGrid" style="display:none;"><div class="grid-wrap"><div id="transferGrid"></div></div></div>
     </div>
   </div>
 
@@ -335,51 +396,79 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
     </div>
 
     <div id="sub_recv" class="subpage active">
+      <div class="view-toggle" data-viewgroup="recv">
+        <button class="vt-btn active" data-view="card">🗂️ كروت</button>
+        <button class="vt-btn" data-view="grid">📊 جدول</button>
+      </div>
       <div class="browser-search"><input class="mc-input" id="recvSearch" placeholder="ابحث برقم الإذن أو اسم المستلم منه..."><span class="si">🔍</span></div>
       <div class="browser-counter" id="recvCounter">0 من 0</div>
-      <div class="browser-stage"><div id="recvCard"></div></div>
-      <div class="browser-nav">
-        <button class="mc-btn small" id="recvFirst">⏮ الأول</button>
-        <button class="mc-btn small" id="recvPrev">◀ السابق</button>
-        <button class="mc-btn small" id="recvNext">التالي ▶</button>
-        <button class="mc-btn small" id="recvLast">الأخير ⏭</button>
+      <div id="recvViewCard">
+        <div class="browser-stage"><div id="recvCard"></div></div>
+        <div class="browser-nav" id="recvNavBtns">
+          <button class="mc-btn small" id="recvFirst">⏮ الأول</button>
+          <button class="mc-btn small" id="recvPrev">◀ السابق</button>
+          <button class="mc-btn small" id="recvNext">التالي ▶</button>
+          <button class="mc-btn small" id="recvLast">الأخير ⏭</button>
+        </div>
       </div>
+      <div id="recvViewGrid" style="display:none;"><div class="grid-wrap"><div id="recvGrid"></div></div></div>
     </div>
 
     <div id="sub_pay" class="subpage">
+      <div class="view-toggle" data-viewgroup="pay">
+        <button class="vt-btn active" data-view="card">🗂️ كروت</button>
+        <button class="vt-btn" data-view="grid">📊 جدول</button>
+      </div>
       <div class="browser-search"><input class="mc-input" id="paySearch" placeholder="ابحث برقم الإذن أو جهة الصرف..."><span class="si">🔍</span></div>
       <div class="browser-counter" id="payCounter">0 من 0</div>
-      <div class="browser-stage"><div id="payCard"></div></div>
-      <div class="browser-nav">
-        <button class="mc-btn small" id="payFirst">⏮ الأول</button>
-        <button class="mc-btn small" id="payPrev">◀ السابق</button>
-        <button class="mc-btn small" id="payNext">التالي ▶</button>
-        <button class="mc-btn small" id="payLast">الأخير ⏭</button>
+      <div id="payViewCard">
+        <div class="browser-stage"><div id="payCard"></div></div>
+        <div class="browser-nav" id="payNavBtns">
+          <button class="mc-btn small" id="payFirst">⏮ الأول</button>
+          <button class="mc-btn small" id="payPrev">◀ السابق</button>
+          <button class="mc-btn small" id="payNext">التالي ▶</button>
+          <button class="mc-btn small" id="payLast">الأخير ⏭</button>
+        </div>
       </div>
+      <div id="payViewGrid" style="display:none;"><div class="grid-wrap"><div id="payGrid"></div></div></div>
     </div>
 
     <div id="sub_instColl" class="subpage">
+      <div class="view-toggle" data-viewgroup="instColl">
+        <button class="vt-btn active" data-view="card">🗂️ كروت</button>
+        <button class="vt-btn" data-view="grid">📊 جدول</button>
+      </div>
       <div class="browser-search"><input class="mc-input" id="instCollSearch" placeholder="ابحث برقم الإذن أو اسم العميل..."><span class="si">🔍</span></div>
       <div class="browser-counter" id="instCollCounter">0 من 0</div>
-      <div class="browser-stage"><div id="instCollCard"></div></div>
-      <div class="browser-nav">
-        <button class="mc-btn small" id="instCollFirst">⏮ الأول</button>
-        <button class="mc-btn small" id="instCollPrev">◀ السابق</button>
-        <button class="mc-btn small" id="instCollNext">التالي ▶</button>
-        <button class="mc-btn small" id="instCollLast">الأخير ⏭</button>
+      <div id="instCollViewCard">
+        <div class="browser-stage"><div id="instCollCard"></div></div>
+        <div class="browser-nav" id="instCollNavBtns">
+          <button class="mc-btn small" id="instCollFirst">⏮ الأول</button>
+          <button class="mc-btn small" id="instCollPrev">◀ السابق</button>
+          <button class="mc-btn small" id="instCollNext">التالي ▶</button>
+          <button class="mc-btn small" id="instCollLast">الأخير ⏭</button>
+        </div>
       </div>
+      <div id="instCollViewGrid" style="display:none;"><div class="grid-wrap"><div id="instCollGrid"></div></div></div>
     </div>
 
     <div id="sub_instPay" class="subpage">
+      <div class="view-toggle" data-viewgroup="instPay">
+        <button class="vt-btn active" data-view="card">🗂️ كروت</button>
+        <button class="vt-btn" data-view="grid">📊 جدول</button>
+      </div>
       <div class="browser-search"><input class="mc-input" id="instPaySearch" placeholder="ابحث برقم الإذن أو اسم المورد..."><span class="si">🔍</span></div>
       <div class="browser-counter" id="instPayCounter">0 من 0</div>
-      <div class="browser-stage"><div id="instPayCard"></div></div>
-      <div class="browser-nav">
-        <button class="mc-btn small" id="instPayFirst">⏮ الأول</button>
-        <button class="mc-btn small" id="instPayPrev">◀ السابق</button>
-        <button class="mc-btn small" id="instPayNext">التالي ▶</button>
-        <button class="mc-btn small" id="instPayLast">الأخير ⏭</button>
+      <div id="instPayViewCard">
+        <div class="browser-stage"><div id="instPayCard"></div></div>
+        <div class="browser-nav" id="instPayNavBtns">
+          <button class="mc-btn small" id="instPayFirst">⏮ الأول</button>
+          <button class="mc-btn small" id="instPayPrev">◀ السابق</button>
+          <button class="mc-btn small" id="instPayNext">التالي ▶</button>
+          <button class="mc-btn small" id="instPayLast">الأخير ⏭</button>
+        </div>
       </div>
+      <div id="instPayViewGrid" style="display:none;"><div class="grid-wrap"><div id="instPayGrid"></div></div></div>
     </div>
   </div>
 
@@ -438,7 +527,7 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
     <div class="card">
       <div class="stitle">📥 تحديث البيانات</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.7;">
-        صدّري ملف الإكسل من الأكسس (زرار التصدير) وارفعيه هنا، وهيتحدّث كل حاجة في الموقع تلقائي.
+        صدّر ملف الإكسل من الأكسس (زرار التصدير) وارفعه هنا، وهيتحدّث كل حاجة في الموقع تلقائي.
       </div>
       <button class="mc-btn gold" style="width:100%;" onclick="document.getElementById('mImport').classList.add('open')">📥 استيراد ملف البيانات</button>
     </div>
@@ -512,7 +601,7 @@ document.querySelectorAll('.subnav').forEach(nav=>{
 $('sLoginBtn').addEventListener('click',()=>{const ls=$('loginSection');ls.style.display=ls.style.display==='none'?'block':'none';});
 $('sNext1').addEventListener('click',async()=>{
   const nm=$('sName').value.trim(),code=$('sPersonalCode').value.trim();
-  if(!nm){toast('⚠️ اكتبي اسمك!');return;}
+  if(!nm){toast('⚠️ اكتب الاسم!');return;}
   if(!code||code.length<4){toast('⚠️ اختر كود 4 أحرف على الأقل!');return;}
   const snap=await get(ref(db,'rb_users'));
   let taken=false;snap.forEach(s=>{if((s.val()?.name||'').toLowerCase()===nm.toLowerCase())taken=true;});
@@ -520,20 +609,20 @@ $('sNext1').addEventListener('click',async()=>{
   uid='u_'+Date.now();uname=nm;
   localStorage.setItem('rb_uid',uid);localStorage.setItem('rb_name',uname);
   await set(ref(db,'rb_users/'+uid),{name:uname,code,ts:Date.now()});
-  $('setupScreen').style.cssText='display:none!important';init();toast('✅ أهلاً بيكِ في رزق البنات يا '+uname);
+  $('setupScreen').style.cssText='display:none!important';init();toast('✅ أهلاً بيك في رزق البنات يا '+uname);
 });
 $('doLogin').addEventListener('click',async()=>{
   const nm=$('loginName').value.trim(),code=$('loginCode').value.trim();
   const errEl=$('loginErr');errEl.style.display='none';
-  if(!nm||!code){errEl.textContent='⚠️ اكتبي الاسم والكود!';errEl.style.display='block';return;}
+  if(!nm||!code){errEl.textContent='⚠️ اكتب الاسم والكود!';errEl.style.display='block';return;}
   const snap=await get(ref(db,'rb_users'));
   let found=null;snap.forEach(s=>{const u=s.val();if((u.name||'').toLowerCase()===nm.toLowerCase()&&u.code===code)found={...u,_k:s.key};});
   if(!found){errEl.textContent='❌ الاسم أو الكود غلط!';errEl.style.display='block';return;}
   uid=found._k;uname=found.name;
   localStorage.setItem('rb_uid',uid);localStorage.setItem('rb_name',uname);
-  $('setupScreen').style.cssText='display:none!important';init();toast('✅ أهلاً بيكِ تاني يا '+uname);
+  $('setupScreen').style.cssText='display:none!important';init();toast('✅ أهلاً بيك تاني يا '+uname);
 });
-RB.logout=function(){if(!confirm('هتخرجي من حسابك؟'))return;localStorage.removeItem('rb_uid');localStorage.removeItem('rb_name');location.reload();};
+RB.logout=function(){if(!confirm('هتخرج من حسابك؟'))return;localStorage.removeItem('rb_uid');localStorage.removeItem('rb_name');location.reload();};
 
 /* ===== الإشعارات (FCM) ===== */
 const VAPID_KEY='BHaZjTgg0msb-9c9AkM_LpRjS7HGmOiGoWTrCkeCp-OpQeJuopra0biYeHDrRUQrUB5bEVjZTQTMnNrqvrEDIe0';
@@ -594,17 +683,29 @@ function listenNotifs(){
   });
 }
 
-/* ===================== محرّك متصفح الكروت العام ===================== */
+/* ===================== محرّك متصفح عام: كروت + جدول إكسل ===================== */
 function makeBrowser(cfg){
-  // cfg: {prefix, dataRef, renderCard, matchFn, sortFn, onData}
-  let full=[],filtered=[],idx=0;
-  function render(dir){
+  // cfg: {prefix, dataRef, renderCard, matchFn, sortFn, onData, columns}
+  let full=[],filtered=[],idx=0,view='card';
+
+  function renderCard(dir){
     const counter=$(cfg.prefix+'Counter'),stage=$(cfg.prefix+'Card');
-    if(!filtered.length){counter.textContent='0 من 0';stage.innerHTML='<div class="empty-state"><div class="ei">🗂️</div><p>لا توجد نتائج</p></div>';setBtns();return;}
-    counter.textContent=(idx+1)+' من '+filtered.length;
+    if(!filtered.length){stage.innerHTML='<div class="empty-state"><div class="ei">🗂️</div><p>لا توجد نتائج</p></div>';return;}
     const html=cfg.renderCard(filtered[idx]);
     stage.innerHTML='<div class="bcard '+(dir==='next'?'slide-next':dir==='prev'?'slide-prev':'')+'">'+html+'</div>';
-    setBtns();
+  }
+  function renderGrid(){
+    const wrap=$(cfg.prefix+'Grid');
+    if(!filtered.length){wrap.innerHTML='<div class="empty-state"><div class="ei">🗂️</div><p>لا توجد نتائج</p></div>';return;}
+    const cols=cfg.columns||[];
+    const thead='<tr>'+cols.map(c=>`<th>${c.label}</th>`).join('')+'</tr>';
+    const rows=filtered.map(item=>'<tr>'+cols.map(c=>`<td>${c.fmt?c.fmt(item):safeA(item[c.key])}</td>`).join('')+'</tr>').join('');
+    wrap.innerHTML=`<table class="excel-table"><thead>${thead}</thead><tbody>${rows}</tbody></table>`;
+  }
+  function updateCounter(){
+    const counter=$(cfg.prefix+'Counter');
+    if(view==='card')counter.textContent=filtered.length?((idx+1)+' من '+filtered.length):'0 من 0';
+    else counter.textContent=filtered.length+' نتيجة';
   }
   function setBtns(){
     const dis=filtered.length===0;
@@ -613,17 +714,33 @@ function makeBrowser(cfg){
     $(cfg.prefix+'Next').disabled=dis||idx>=filtered.length-1;
     $(cfg.prefix+'Last').disabled=dis||idx>=filtered.length-1;
   }
+  function renderActive(dir){
+    if(view==='card'){renderCard(dir);setBtns();}
+    else renderGrid();
+    updateCounter();
+  }
   function applySearch(){
     const q=($(cfg.prefix+'Search').value||'').trim().toLowerCase();
     filtered=q?full.filter(item=>cfg.matchFn(item,q)):full.slice();
     if(cfg.sortFn)filtered.sort(cfg.sortFn);
-    idx=0;render();
+    idx=0;renderActive();
   }
   $(cfg.prefix+'Search').addEventListener('input',applySearch);
-  $(cfg.prefix+'First').addEventListener('click',()=>{if(idx>0){idx=0;render('prev');}});
-  $(cfg.prefix+'Prev').addEventListener('click',()=>{if(idx>0){idx--;render('prev');}});
-  $(cfg.prefix+'Next').addEventListener('click',()=>{if(idx<filtered.length-1){idx++;render('next');}});
-  $(cfg.prefix+'Last').addEventListener('click',()=>{if(idx<filtered.length-1){idx=filtered.length-1;render('next');}});
+  $(cfg.prefix+'First').addEventListener('click',()=>{if(idx>0){idx=0;renderActive('prev');}});
+  $(cfg.prefix+'Prev').addEventListener('click',()=>{if(idx>0){idx--;renderActive('prev');}});
+  $(cfg.prefix+'Next').addEventListener('click',()=>{if(idx<filtered.length-1){idx++;renderActive('next');}});
+  $(cfg.prefix+'Last').addEventListener('click',()=>{if(idx<filtered.length-1){idx=filtered.length-1;renderActive('next');}});
+
+  document.querySelectorAll(`.view-toggle[data-viewgroup="${cfg.prefix}"] .vt-btn`).forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      view=btn.dataset.view;
+      document.querySelectorAll(`.view-toggle[data-viewgroup="${cfg.prefix}"] .vt-btn`).forEach(b=>b.classList.toggle('active',b===btn));
+      $(cfg.prefix+'ViewCard').style.display=view==='card'?'':'none';
+      $(cfg.prefix+'ViewGrid').style.display=view==='grid'?'':'none';
+      renderActive();
+    });
+  });
+
   onValue(ref(db,cfg.dataRef),snap=>{
     full=snap.val()?Object.values(snap.val()):[];
     if(cfg.sortFn)full.sort(cfg.sortFn);
@@ -639,6 +756,10 @@ makeBrowser({
   matchFn:(c,q)=>(c.name||'').toLowerCase().includes(q)||String(c.code||'').includes(q)||(c.phone||'').includes(q),
   sortFn:(a,b)=>(a.code||0)-(b.code||0),
   onData:(obj)=>{customersCache=obj;populateStmtSelect('custStmtSelect',obj);},
+  columns:[
+    {label:'كود',key:'code'},{label:'الاسم',key:'name'},{label:'الهاتف',key:'phone'},
+    {label:'العنوان',key:'address'},{label:'رصيد أول المدة',fmt:c=>fmtMoney(c.openBalance)}
+  ],
   renderCard:c=>`
     <span class="bcode-badge">كود ${safeA(c.code)}</span>
     <div class="bname">👤 ${safeA(c.name)}</div>
@@ -653,6 +774,10 @@ makeBrowser({
   matchFn:(c,q)=>(c.name||'').toLowerCase().includes(q)||String(c.code||'').includes(q)||(c.phone||'').includes(q),
   sortFn:(a,b)=>(a.code||0)-(b.code||0),
   onData:(obj)=>{suppliersCache=obj;populateStmtSelect('suppStmtSelect',obj);},
+  columns:[
+    {label:'كود',key:'code'},{label:'الاسم',key:'name'},{label:'الهاتف',key:'phone'},
+    {label:'العنوان',key:'address'},{label:'رصيد أول المدة',fmt:c=>fmtMoney(c.openBalance)}
+  ],
   renderCard:c=>`
     <span class="bcode-badge">كود ${safeA(c.code)}</span>
     <div class="bname">🚚 ${safeA(c.name)}</div>
@@ -666,14 +791,21 @@ makeBrowser({
   prefix:'item',dataRef:'rb_items',
   matchFn:(c,q)=>(c.name||'').toLowerCase().includes(q)||String(c.code||'').includes(q)||(c.category||'').toLowerCase().includes(q)||(c.itemNo||'').toLowerCase().includes(q),
   sortFn:(a,b)=>(a.code||0)-(b.code||0),
+  columns:[
+    {label:'كود',key:'code'},{label:'رقم الصنف',key:'itemNo'},{label:'الاسم',key:'name'},
+    {label:'التصنيف',key:'category'},{label:'الوحدة',key:'unit'},{label:'الكمية',fmt:c=>fmtMoney(c.qty)},
+    {label:'سعر الشراء',fmt:c=>fmtMoney(c.buyPrice)},{label:'سعر البيع',fmt:c=>fmtMoney(c.sellPrice)}
+  ],
   renderCard:c=>{
     const profit=(parseFloat(c.sellPrice)||0)-(parseFloat(c.buyPrice)||0);
+    const qty=parseFloat(c.qty)||0;
     return `
     <span class="bcode-badge">كود ${safeA(c.code)}</span>
     <div class="bname">📦 ${safeA(c.name)}</div>
     <div class="bfield"><span class="bl">🔖 رقم الصنف</span><span class="bv">${safeA(c.itemNo)||'—'}</span></div>
     <div class="bfield"><span class="bl">🏷️ التصنيف</span><span class="bv">${safeA(c.category)||'—'}</span></div>
     <div class="bfield"><span class="bl">📏 الوحدة</span><span class="bv">${safeA(c.unit)||'—'}</span></div>
+    <div class="bfield"><span class="bl">📦 الكمية المتاحة</span><span class="bv" style="color:${qty<=0?'var(--danger)':'var(--success)'};">${fmtMoney(qty)} ${safeA(c.unit)||''}</span></div>
     <div class="bfield"><span class="bl">🛒 سعر الشراء</span><span class="bv">${fmtMoney(c.buyPrice)} جنيه</span></div>
     <div class="bfield"><span class="bl">💵 سعر البيع</span><span class="bv">${fmtMoney(c.sellPrice)} جنيه</span></div>
     <div class="bfield"><span class="bl">📈 المكسب</span><span class="bv" style="color:var(--success);">${fmtMoney(profit)} جنيه</span></div>`;
@@ -685,6 +817,10 @@ makeBrowser({
   prefix:'wh',dataRef:'rb_warehouses',
   matchFn:(c,q)=>(c.name||'').toLowerCase().includes(q)||String(c.code||'').includes(q)||(c.location||'').toLowerCase().includes(q),
   sortFn:(a,b)=>(a.code||0)-(b.code||0),
+  columns:[
+    {label:'كود',key:'code'},{label:'الاسم',key:'name'},{label:'الموقع',key:'location'},
+    {label:'العنوان',key:'address'},{label:'المدير',key:'manager'},{label:'هاتف المدير',key:'managerPhone'}
+  ],
   renderCard:c=>`
     <span class="bcode-badge">كود ${safeA(c.code)}</span>
     <div class="bname">🏬 ${safeA(c.name)}</div>
@@ -708,7 +844,7 @@ makeBrowser({
       <div class="list-row">
         <div class="lr-info">
           <div class="lr-name">📦 ${safeA(c.name)}</div>
-          <div class="lr-code">كود ${safeA(c.code)}${c.itemNo?' • رقم '+safeA(c.itemNo):''}</div>
+          <div class="lr-code">كود ${safeA(c.code)}${c.itemNo?' • رقم '+safeA(c.itemNo):''} • الكمية: ${fmtMoney(c.qty)}</div>
         </div>
         <div class="lr-prices">
           <span class="lr-sell">بيع ${fmtMoney(c.sellPrice)}</span>
@@ -730,6 +866,12 @@ makeBrowser({
   matchFn:(inv,q)=>String(inv.invoiceNo||'').includes(q)||(inv.customerName||'').toLowerCase().includes(q),
   sortFn:(a,b)=>(b.invoiceNo||0)-(a.invoiceNo||0),
   onData:(obj)=>{salesCache=obj;},
+  columns:[
+    {label:'رقم الفاتورة',key:'invoiceNo'},{label:'التاريخ',fmt:i=>fmtDate(i.date)},
+    {label:'العميل',key:'customerName'},{label:'النوع',key:'type'},
+    {label:'الإجمالي',fmt:i=>fmtMoney((i.items||[]).reduce((s,it)=>s+(parseFloat(it.value)||0),0))},
+    {label:'المدفوع',fmt:i=>fmtMoney(i.paid)}
+  ],
   renderCard:inv=>{
     const items=inv.items||[];
     const total=items.reduce((s,it)=>s+(parseFloat(it.value)||0),0);
@@ -754,6 +896,12 @@ makeBrowser({
   matchFn:(inv,q)=>String(inv.invoiceNo||'').includes(q)||(inv.supplierName||'').toLowerCase().includes(q),
   sortFn:(a,b)=>(b.invoiceNo||0)-(a.invoiceNo||0),
   onData:(obj)=>{purchasesCache=obj;},
+  columns:[
+    {label:'رقم الفاتورة',key:'invoiceNo'},{label:'التاريخ',fmt:i=>fmtDate(i.date)},
+    {label:'المورد',key:'supplierName'},{label:'النوع',key:'type'},
+    {label:'الإجمالي',fmt:i=>fmtMoney((i.items||[]).reduce((s,it)=>s+(parseFloat(it.value)||0),0))},
+    {label:'المدفوع',fmt:i=>fmtMoney(i.paid)}
+  ],
   renderCard:inv=>{
     const items=inv.items||[];
     const total=items.reduce((s,it)=>s+(parseFloat(it.value)||0),0);
@@ -777,6 +925,10 @@ makeBrowser({
   prefix:'transfer',dataRef:'rb_transfer_vouchers',
   matchFn:(v,q)=>String(v.voucherNo||'').includes(q),
   sortFn:(a,b)=>(b.voucherNo||0)-(a.voucherNo||0),
+  columns:[
+    {label:'رقم الإذن',key:'voucherNo'},{label:'التاريخ',fmt:v=>fmtDate(v.date)},
+    {label:'من مخزن',key:'fromWarehouseName'},{label:'إلى مخزن',key:'toWarehouseName'}
+  ],
   renderCard:v=>{
     const items=v.items||[];
     const rows=items.map(it=>`<tr><td>${safeA(it.itemName)}</td><td>${fmtMoney(it.qty)}</td><td>${fmtMoney(it.buyValue)}</td><td>${fmtMoney(it.sellValue)}</td></tr>`).join('')||'<tr><td colspan="4" style="color:var(--muted);">لا توجد أصناف مسجلة</td></tr>';
@@ -796,6 +948,10 @@ makeBrowser({
   prefix:'recv',dataRef:'rb_cash_receipts',
   matchFn:(r,q)=>String(r.no||'').includes(q)||(r.from||'').toLowerCase().includes(q),
   sortFn:(a,b)=>(b.no||0)-(a.no||0),
+  columns:[
+    {label:'رقم الإذن',key:'no'},{label:'التاريخ',fmt:r=>fmtDate(r.date)},
+    {label:'مستلم من',key:'from'},{label:'القيمة',fmt:r=>fmtMoney(r.amount)},{label:'البيان',key:'desc'}
+  ],
   renderCard:r=>`
     <span class="bcode-badge">إذن رقم ${safeA(r.no)}</span>
     <div class="bname">📥 ${safeA(r.from)||'—'}</div>
@@ -810,6 +966,10 @@ makeBrowser({
   prefix:'pay',dataRef:'rb_cash_payments',
   matchFn:(r,q)=>String(r.no||'').includes(q)||(r.to||'').toLowerCase().includes(q),
   sortFn:(a,b)=>(b.no||0)-(a.no||0),
+  columns:[
+    {label:'رقم الإذن',key:'no'},{label:'التاريخ',fmt:r=>fmtDate(r.date)},
+    {label:'منصرف إلى',key:'to'},{label:'القيمة',fmt:r=>fmtMoney(r.amount)},{label:'البيان',key:'desc'}
+  ],
   renderCard:r=>`
     <span class="bcode-badge">إذن رقم ${safeA(r.no)}</span>
     <div class="bname">📤 ${safeA(r.to)||'—'}</div>
@@ -827,6 +987,10 @@ makeBrowser({
   matchFn:(r,q)=>String(r.no||'').includes(q)||(r.customerName||'').toLowerCase().includes(q),
   sortFn:(a,b)=>(b.no||0)-(a.no||0),
   onData:(obj)=>{collectionsCache=obj;},
+  columns:[
+    {label:'رقم الإذن',key:'no'},{label:'التاريخ',fmt:r=>fmtDate(r.date)},
+    {label:'العميل',key:'customerName'},{label:'القيمة',fmt:r=>fmtMoney(r.amount)},{label:'البيان',key:'desc'}
+  ],
   renderCard:r=>`
     <span class="bcode-badge">إذن رقم ${safeA(r.no)}</span>
     <div class="bname">💳 ${safeA(r.customerName)||'عميل غير محدد'}</div>
@@ -842,6 +1006,10 @@ makeBrowser({
   matchFn:(r,q)=>String(r.no||'').includes(q)||(r.supplierName||'').toLowerCase().includes(q),
   sortFn:(a,b)=>(b.no||0)-(a.no||0),
   onData:(obj)=>{paymentsCache=obj;},
+  columns:[
+    {label:'رقم الإذن',key:'no'},{label:'التاريخ',fmt:r=>fmtDate(r.date)},
+    {label:'المورد',key:'supplierName'},{label:'القيمة',fmt:r=>fmtMoney(r.amount)},{label:'البيان',key:'desc'}
+  ],
   renderCard:r=>`
     <span class="bcode-badge">إذن رقم ${safeA(r.no)}</span>
     <div class="bname">💳 ${safeA(r.supplierName)||'مورد غير محدد'}</div>
@@ -911,7 +1079,7 @@ function buildCustomerStatement(){
       <div class="bfield"><span class="bl">💰 رصيد أول المدة (قبل الحركات)</span><span class="bv">${fmtMoney(cust.openBalance)} جنيه</span></div>
       <table class="items-table"><thead><tr><th>التاريخ</th><th>البيان</th><th>مدين (عليه)</th><th>دائن (تحصيل)</th><th>الرصيد</th></tr></thead><tbody>${bodyRows}</tbody></table>
       <div class="inv-total-row"><span>إجمالي مدين / دائن</span><span>${fmtMoney(totalDebit)} / ${fmtMoney(totalCredit)}</span></div>
-      <div class="inv-total-row" style="border-top:2px solid var(--primary-dk);"><span>الرصيد المستحق للعميل حتى الآن</span><span>${fmtMoney(bal)} جنيه</span></div>
+      <div class="inv-total-row" style="border-top:2px solid var(--primary-dk);"><span>الرصيد المستحق على العميل حتى الآن</span><span>${fmtMoney(bal)} جنيه</span></div>
     </div>`;
 }
 $('custStmtBtn').addEventListener('click',buildCustomerStatement);
@@ -986,6 +1154,7 @@ $('doImport').addEventListener('click',async()=>{
     const transferVoucherRows=findSheet(wb,['اذن تحويل مخزني','اذن_تحويل_مخزني'])||[];
     const transferMoveRows=findSheet(wb,['حركة التحويل المخزني','حركة_التحويل_المخزني'])||[];
     const basicInfoRows=findSheet(wb,['بيانات اساسية','بيانات_اساسية'])||[];
+    const openingStockRows=findSheet(wb,['رصيد اول المده','رصيد اول المدة'])||[];
 
     statusEl.textContent='⏳ جاري تجهيز العملاء والموردين والأصناف...';
 
@@ -1055,6 +1224,22 @@ $('doImport').addEventListener('click',async()=>{
         price:pick(r,'سعر الشراء')||0,qty:pick(r,'صافى الكمية','صافي الكمية','الكمية المشتراه')||0,value:pick(r,'القيمة')||0
       });
     });
+
+    // حساب الكمية الحالية لكل صنف = رصيد أول المدة + المشتريات - المبيعات
+    const qtyMap={};
+    openingStockRows.forEach(r=>{
+      const itemCode=pick(r,'اسم الصنف','أسم الصنف');if(itemCode==='')return;
+      qtyMap[itemCode]=(qtyMap[itemCode]||0)+(parseFloat(pick(r,'رصيد اول المدة'))||0);
+    });
+    purchMoveRows.forEach(r=>{
+      const itemCode=pick(r,'أسم الصنف','اسم الصنف');if(itemCode==='')return;
+      qtyMap[itemCode]=(qtyMap[itemCode]||0)+(parseFloat(pick(r,'صافى الكمية','صافي الكمية','الكمية المشتراه'))||0);
+    });
+    saleMoveRows.forEach(r=>{
+      const itemCode=pick(r,'أسم الصنف','اسم الصنف');if(itemCode==='')return;
+      qtyMap[itemCode]=(qtyMap[itemCode]||0)-(parseFloat(pick(r,'صافى الكمية','صافي الكمية','الكمية المباعة'))||0);
+    });
+    Object.keys(itemsObj).forEach(code=>{itemsObj[code].qty=qtyMap[code]||0;});
 
     statusEl.textContent='⏳ جاري تجهيز الخزينة والأقساط والتحويلات...';
 
@@ -1142,7 +1327,7 @@ $('doImport').addEventListener('click',async()=>{
     await set(ref(db,'rb_transfer_vouchers'),transferObj);
     if(basicInfo)await set(ref(db,'rb_basic_info'),basicInfo);
 
-    // إشعار كل المستخدمين التانيين إن فيه نسخة بيانات جديدة اتحطت
+    // إشعار كل المستخدمين الآخرين إن فيه نسخة بيانات جديدة اتحطت
     const usersSnap=await get(ref(db,'rb_users'));
     usersSnap.forEach(s=>{
       pushNotif(s.key,'📥',(uname||'حد')+' حط نسخة بيانات جديدة على النظام',{type:'account'});
@@ -1154,7 +1339,7 @@ $('doImport').addEventListener('click',async()=>{
   }catch(e){
     console.error(e);
     statusEl.textContent='❌ حصل خطأ: '+e.message;
-    toast('❌ حصل خطأ في قراءة الملف، تأكدي إنه نفس الملف المُصدَّر من الأكسس');
+    toast('❌ حصل خطأ في قراءة الملف، تأكد إنه نفس الملف المُصدَّر من الأكسس');
   }
 });
 
@@ -1175,14 +1360,14 @@ function showCompanyInfo(){
 
 /* ===== لوحة الرئيسية ===== */
 function refreshDashboard(){
-  $('heroGreeting').textContent='أهلاً بيكِ يا '+(uname||'')+' 👋';
+  $('heroGreeting').textContent='أهلاً بيك يا '+(uname||'')+' 👋';
   $('accName').textContent=uname||'—';
   get(ref(db,'rb_items')).then(s=>{$('statItems').textContent=s.exists()?Object.keys(s.val()).length:0;});
   get(ref(db,'rb_sales_invoices')).then(s=>{$('statSales').textContent=s.exists()?Object.keys(s.val()).length:0;});
   get(ref(db,'rb_purchase_invoices')).then(s=>{$('statPurch').textContent=s.exists()?Object.keys(s.val()).length:0;});
   onValue(ref(db,'rb_sales_invoices'),snap=>{
     const box=$('recentActivity');
-    if(!snap.exists()){box.innerHTML='<div class="empty-state"><div class="ei">🗂️</div><p>لسه مفيش بيانات — حدّثي البيانات من صفحة "حسابي"</p></div>';return;}
+    if(!snap.exists()){box.innerHTML='<div class="empty-state"><div class="ei">🗂️</div><p>لا توجد بيانات بعد — حدّث البيانات من صفحة "حسابي"</p></div>';return;}
     const list=Object.values(snap.val()).sort((a,b)=>(b.invoiceNo||0)-(a.invoiceNo||0)).slice(0,5);
     box.innerHTML=list.map(inv=>{
       const total=(inv.items||[]).reduce((s,it)=>s+(parseFloat(it.value)||0),0);
