@@ -36,10 +36,11 @@ header{background:linear-gradient(180deg,var(--primary),var(--primary-dk));posit
 .icbtn:hover{background:rgba(255,255,255,.2);}
 .ndot{position:absolute;top:3px;left:3px;width:8px;height:8px;border-radius:50%;background:#ffd23f;display:none;}
 
-.tnav{position:fixed;top:var(--nav-h);left:0;right:0;z-index:999;background:var(--surface);border-bottom:1px solid var(--border);display:flex;height:var(--tab-h);box-shadow:0 4px 10px rgba(43,31,26,.04);}
-.tni{display:flex;flex-direction:column;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;flex:1;position:relative;color:var(--muted);font-family:'Cairo',sans-serif;transition:color .15s ease;}
+.tnav{position:fixed;top:var(--nav-h);left:0;right:0;z-index:999;background:var(--surface);border-bottom:1px solid var(--border);display:flex;height:var(--tab-h);box-shadow:0 4px 10px rgba(43,31,26,.04);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tnav::-webkit-scrollbar{display:none;}
+.tni{display:flex;flex:0 0 76px;flex-direction:column;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;position:relative;color:var(--muted);font-family:'Cairo',sans-serif;transition:color .15s ease;}
 .tni-icon{font-size:19px;line-height:1;}
-.tni-label{font-size:10px;font-weight:700;margin-top:3px;}
+.tni-label{font-size:9.5px;font-weight:700;margin-top:3px;white-space:nowrap;}
 .tni::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--primary);opacity:0;border-radius:3px 3px 0 0;transition:opacity .15s;}
 .tni.active{color:var(--primary);}
 .tni.active::after{opacity:1;}
@@ -68,15 +69,16 @@ header{background:linear-gradient(180deg,var(--primary),var(--primary-dk));posit
 .mc-input{background:var(--surface2);border:1.5px solid var(--border);color:var(--ink);font-family:'Cairo',sans-serif;font-size:14px;padding:11px 13px;width:100%;outline:none;margin-bottom:9px;border-radius:10px;transition:border-color .15s ease;}
 .mc-input:focus{border-color:var(--primary);}
 .mc-input::placeholder{color:#b7a998;}
+select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9'><path d='M1 1l6 6 6-6' stroke='%238b8b96' stroke-width='2' fill='none'/></svg>");background-repeat:no-repeat;background-position:left 12px center;}
 
 .hero{background:linear-gradient(135deg,var(--primary),var(--primary-dk));border-radius:18px;padding:20px 16px;color:#fff;margin-bottom:14px;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(75,42,128,.28);}
 .hero::after{content:'✦';position:absolute;top:10px;left:14px;font-size:14px;color:var(--gold);opacity:.8;}
 .hero-title{font-size:17px;font-weight:900;margin-bottom:4px;}
 .hero-sub{font-size:12px;opacity:.85;}
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;}
-.stat-box{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:10px 6px;text-align:center;}
-.stat-num{font-size:16px;font-weight:900;}
-.stat-lbl{font-size:9px;opacity:.85;margin-top:2px;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px;}
+.stat-box{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:10px 4px;text-align:center;}
+.stat-num{font-size:14px;font-weight:900;}
+.stat-lbl{font-size:8.5px;opacity:.85;margin-top:2px;}
 .quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
 .quick-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px 6px;text-align:center;cursor:pointer;transition:all .15s ease;}
 .quick-btn:hover{border-color:var(--primary);transform:translateY(-2px);}
@@ -121,6 +123,12 @@ header{background:linear-gradient(180deg,var(--primary),var(--primary-dk));posit
 .items-table td{padding:7px 6px;text-align:center;border-bottom:1px solid var(--border);}
 .inv-total-row{display:flex;justify-content:space-between;padding:9px 0;font-weight:900;color:var(--primary-dk);border-top:2px solid var(--primary);margin-top:6px;}
 
+.treasury-hero{background:linear-gradient(135deg,#2f6b3f,#1d4a29);border-radius:18px;padding:18px 16px;color:#fff;margin-bottom:14px;box-shadow:0 10px 26px rgba(29,74,41,.28);text-align:center;}
+.treasury-hero .th-lbl{font-size:12px;opacity:.85;margin-bottom:4px;}
+.treasury-hero .th-num{font-size:24px;font-weight:900;}
+.date-range-row{display:flex;gap:8px;}
+.date-range-row .mc-input{flex:1;}
+
 .setup-screen{position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,var(--primary-dk),var(--primary));display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto;}
 .setup-box{background:var(--surface);border-radius:20px;box-shadow:0 20px 50px rgba(0,0,0,.3);padding:26px 20px;width:100%;max-width:380px;text-align:center;}
 .slogo{font-size:22px;font-weight:900;color:var(--primary-dk);margin-bottom:2px;}
@@ -146,7 +154,7 @@ header{background:linear-gradient(180deg,var(--primary),var(--primary-dk));posit
   <div class="setup-box">
     <div class="smark">🏠</div>
     <div class="slogo">رزق البنات</div>
-    <div class="ssub">نظام إدارة الأصناف والفواتير</div>
+    <div class="ssub">نظام إدارة الأصناف والفواتير والخزينة</div>
     <div id="setupStep1">
       <div style="font-size:11px;color:var(--muted);text-align:right;margin-bottom:3px;">اسمك:</div>
       <input class="mc-input" id="sName" placeholder="اسمك...">
@@ -178,6 +186,8 @@ header{background:linear-gradient(180deg,var(--primary),var(--primary-dk));posit
   <button class="tni active" data-pg="home"><span class="tni-icon">🏠</span><span class="tni-label">الرئيسية</span></button>
   <button class="tni" data-pg="coding"><span class="tni-icon">🗂️</span><span class="tni-label">التكويد</span></button>
   <button class="tni" data-pg="invoices"><span class="tni-icon">🧾</span><span class="tni-label">الفواتير</span></button>
+  <button class="tni" data-pg="treasury"><span class="tni-icon">💰</span><span class="tni-label">الخزينة</span></button>
+  <button class="tni" data-pg="reports"><span class="tni-icon">📊</span><span class="tni-label">كشف حساب</span></button>
   <button class="tni" data-pg="itemsearch"><span class="tni-icon">🔍</span><span class="tni-label">بحث الأصناف</span></button>
   <button class="tni" data-pg="account"><span class="tni-icon">👤</span><span class="tni-label">حسابي</span></button>
 </nav>
@@ -188,16 +198,20 @@ header{background:linear-gradient(180deg,var(--primary),var(--primary-dk));posit
   <div id="pg_home" class="page active">
     <div class="hero">
       <div class="hero-title" id="heroGreeting">أهلاً بيكِ 👋</div>
-      <div class="hero-sub">لوحة تحكم رزق البنات لإدارة الأصناف والفواتير</div>
+      <div class="hero-sub">لوحة تحكم رزق البنات لإدارة الأصناف والفواتير والخزينة</div>
       <div class="stats-grid">
         <div class="stat-box"><div class="stat-num" id="statItems">0</div><div class="stat-lbl">صنف</div></div>
         <div class="stat-box"><div class="stat-num" id="statSales">0</div><div class="stat-lbl">فاتورة بيع</div></div>
         <div class="stat-box"><div class="stat-num" id="statPurch">0</div><div class="stat-lbl">فاتورة شراء</div></div>
+        <div class="stat-box"><div class="stat-num" id="statTreasury">0</div><div class="stat-lbl">رصيد الخزينة</div></div>
       </div>
     </div>
     <div class="quick-grid">
       <div class="quick-btn" data-goto="coding"><span class="qi">🗂️</span><span class="qt">التكويد</span></div>
       <div class="quick-btn" data-goto="invoices"><span class="qi">🧾</span><span class="qt">الفواتير</span></div>
+      <div class="quick-btn" data-goto="treasury"><span class="qi">💰</span><span class="qt">الخزينة</span></div>
+      <div class="quick-btn" data-goto="reports"><span class="qi">📊</span><span class="qt">كشف حساب</span></div>
+      <div class="quick-btn" data-goto="itemsearch"><span class="qi">🔍</span><span class="qt">بحث الأصناف</span></div>
       <div class="quick-btn" data-goto="account"><span class="qi">📥</span><span class="qt">تحديث البيانات</span></div>
     </div>
     <div class="stitle">🕘 آخر فواتير البيع</div>
@@ -210,6 +224,7 @@ header{background:linear-gradient(180deg,var(--primary),var(--primary-dk));posit
       <button class="subtab active" data-sub="cust">👥 العملاء</button>
       <button class="subtab" data-sub="supp">🚚 الموردين</button>
       <button class="subtab" data-sub="item">📦 الأصناف</button>
+      <button class="subtab" data-sub="wh">🏬 المخازن</button>
     </div>
 
     <div id="sub_cust" class="subpage active">
@@ -247,6 +262,18 @@ header{background:linear-gradient(180deg,var(--primary),var(--primary-dk));posit
         <button class="mc-btn small" id="itemLast">الأخير ⏭</button>
       </div>
     </div>
+
+    <div id="sub_wh" class="subpage">
+      <div class="browser-search"><input class="mc-input" id="whSearch" placeholder="ابحث باسم المخزن أو الكود أو الموقع..."><span class="si">🔍</span></div>
+      <div class="browser-counter" id="whCounter">0 من 0</div>
+      <div class="browser-stage"><div id="whCard"></div></div>
+      <div class="browser-nav">
+        <button class="mc-btn small" id="whFirst">⏮ الأول</button>
+        <button class="mc-btn small" id="whPrev">◀ السابق</button>
+        <button class="mc-btn small" id="whNext">التالي ▶</button>
+        <button class="mc-btn small" id="whLast">الأخير ⏭</button>
+      </div>
+    </div>
   </div>
 
   <!-- ===== الفواتير ===== -->
@@ -254,6 +281,7 @@ header{background:linear-gradient(180deg,var(--primary),var(--primary-dk));posit
     <div class="subnav">
       <button class="subtab active" data-sub="sale">🧾 فاتورة بيع</button>
       <button class="subtab" data-sub="purch">🧾 فاتورة شراء</button>
+      <button class="subtab" data-sub="transfer">🔁 تحويل مخزني</button>
     </div>
 
     <div id="sub_sale" class="subpage active">
@@ -279,6 +307,114 @@ header{background:linear-gradient(180deg,var(--primary),var(--primary-dk));posit
         <button class="mc-btn small" id="purchLast">الأخير ⏭</button>
       </div>
     </div>
+
+    <div id="sub_transfer" class="subpage">
+      <div class="browser-search"><input class="mc-input" id="transferSearch" placeholder="ابحث برقم الإذن..."><span class="si">🔍</span></div>
+      <div class="browser-counter" id="transferCounter">0 من 0</div>
+      <div class="browser-stage"><div id="transferCard"></div></div>
+      <div class="browser-nav">
+        <button class="mc-btn small" id="transferFirst">⏮ الأول</button>
+        <button class="mc-btn small" id="transferPrev">◀ السابق</button>
+        <button class="mc-btn small" id="transferNext">التالي ▶</button>
+        <button class="mc-btn small" id="transferLast">الأخير ⏭</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== الخزينة ===== -->
+  <div id="pg_treasury" class="page">
+    <div class="treasury-hero">
+      <div class="th-lbl">💰 رصيد الخزينة الحالي</div>
+      <div class="th-num" id="treasuryBalanceBig">0 جنيه</div>
+    </div>
+    <div class="subnav">
+      <button class="subtab active" data-sub="recv">📥 استلام نقدية</button>
+      <button class="subtab" data-sub="pay">📤 صرف نقدية</button>
+      <button class="subtab" data-sub="instColl">💳 تحصيل أقساط</button>
+      <button class="subtab" data-sub="instPay">💳 سداد أقساط</button>
+    </div>
+
+    <div id="sub_recv" class="subpage active">
+      <div class="browser-search"><input class="mc-input" id="recvSearch" placeholder="ابحث برقم الإذن أو اسم المستلم منه..."><span class="si">🔍</span></div>
+      <div class="browser-counter" id="recvCounter">0 من 0</div>
+      <div class="browser-stage"><div id="recvCard"></div></div>
+      <div class="browser-nav">
+        <button class="mc-btn small" id="recvFirst">⏮ الأول</button>
+        <button class="mc-btn small" id="recvPrev">◀ السابق</button>
+        <button class="mc-btn small" id="recvNext">التالي ▶</button>
+        <button class="mc-btn small" id="recvLast">الأخير ⏭</button>
+      </div>
+    </div>
+
+    <div id="sub_pay" class="subpage">
+      <div class="browser-search"><input class="mc-input" id="paySearch" placeholder="ابحث برقم الإذن أو جهة الصرف..."><span class="si">🔍</span></div>
+      <div class="browser-counter" id="payCounter">0 من 0</div>
+      <div class="browser-stage"><div id="payCard"></div></div>
+      <div class="browser-nav">
+        <button class="mc-btn small" id="payFirst">⏮ الأول</button>
+        <button class="mc-btn small" id="payPrev">◀ السابق</button>
+        <button class="mc-btn small" id="payNext">التالي ▶</button>
+        <button class="mc-btn small" id="payLast">الأخير ⏭</button>
+      </div>
+    </div>
+
+    <div id="sub_instColl" class="subpage">
+      <div class="browser-search"><input class="mc-input" id="instCollSearch" placeholder="ابحث برقم الإذن أو اسم العميل..."><span class="si">🔍</span></div>
+      <div class="browser-counter" id="instCollCounter">0 من 0</div>
+      <div class="browser-stage"><div id="instCollCard"></div></div>
+      <div class="browser-nav">
+        <button class="mc-btn small" id="instCollFirst">⏮ الأول</button>
+        <button class="mc-btn small" id="instCollPrev">◀ السابق</button>
+        <button class="mc-btn small" id="instCollNext">التالي ▶</button>
+        <button class="mc-btn small" id="instCollLast">الأخير ⏭</button>
+      </div>
+    </div>
+
+    <div id="sub_instPay" class="subpage">
+      <div class="browser-search"><input class="mc-input" id="instPaySearch" placeholder="ابحث برقم الإذن أو اسم المورد..."><span class="si">🔍</span></div>
+      <div class="browser-counter" id="instPayCounter">0 من 0</div>
+      <div class="browser-stage"><div id="instPayCard"></div></div>
+      <div class="browser-nav">
+        <button class="mc-btn small" id="instPayFirst">⏮ الأول</button>
+        <button class="mc-btn small" id="instPayPrev">◀ السابق</button>
+        <button class="mc-btn small" id="instPayNext">التالي ▶</button>
+        <button class="mc-btn small" id="instPayLast">الأخير ⏭</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== كشف حساب (استعلام بين تاريخين) ===== -->
+  <div id="pg_reports" class="page">
+    <div class="subnav">
+      <button class="subtab active" data-sub="custStmt">👥 كشف حساب عميل</button>
+      <button class="subtab" data-sub="suppStmt">🚚 كشف حساب مورد</button>
+    </div>
+
+    <div id="sub_custStmt" class="subpage active">
+      <div class="card">
+        <div class="stitle">👥 كشف حساب عميل بين تاريخين</div>
+        <select class="mc-input" id="custStmtSelect"><option value="">-- اختر العميل --</option></select>
+        <div class="date-range-row">
+          <input type="date" class="mc-input" id="custStmtFrom">
+          <input type="date" class="mc-input" id="custStmtTo">
+        </div>
+        <button class="mc-btn" style="width:100%;" id="custStmtBtn">📊 عرض كشف الحساب</button>
+      </div>
+      <div id="custStmtResult"></div>
+    </div>
+
+    <div id="sub_suppStmt" class="subpage">
+      <div class="card">
+        <div class="stitle">🚚 كشف حساب مورد بين تاريخين</div>
+        <select class="mc-input" id="suppStmtSelect"><option value="">-- اختر المورد --</option></select>
+        <div class="date-range-row">
+          <input type="date" class="mc-input" id="suppStmtFrom">
+          <input type="date" class="mc-input" id="suppStmtTo">
+        </div>
+        <button class="mc-btn" style="width:100%;" id="suppStmtBtn">📊 عرض كشف الحساب</button>
+      </div>
+      <div id="suppStmtResult"></div>
+    </div>
   </div>
 
   <!-- ===== بحث الأصناف ===== -->
@@ -293,7 +429,11 @@ header{background:linear-gradient(180deg,var(--primary),var(--primary-dk));posit
   <div id="pg_account" class="page">
     <div class="card">
       <div style="font-size:13px;font-weight:900;color:var(--primary-dk);margin-bottom:2px;" id="accName">—</div>
-      <div style="font-size:11px;color:var(--muted);">موظفة في رزق البنات</div>
+      <div style="font-size:11px;color:var(--muted);">موظف في رزق البنات</div>
+    </div>
+    <div class="card" id="companyInfoCard" style="display:none;">
+      <div class="stitle">🏢 بيانات المنشأة</div>
+      <div id="companyInfoBody"></div>
     </div>
     <div class="card">
       <div class="stitle">📥 تحديث البيانات</div>
@@ -333,9 +473,20 @@ function toast(m){const t=$('toast');t.textContent=m;t.className='toast show';se
 function safeA(s){return(s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,"&#39;").replace(/"/g,'&quot;');}
 function fmtMoney(n){n=parseFloat(n)||0;return n.toLocaleString('ar-EG',{maximumFractionDigits:2});}
 function fmtDate(v){if(!v)return'—';try{const d=(v instanceof Date)?v:new Date(v);if(isNaN(d))return safeA(v);return d.toLocaleDateString('ar-EG');}catch(e){return safeA(v);}}
+function inRange(dateVal,fromStr,toStr){
+  if(!dateVal)return!fromStr&&!toStr;
+  const d=(dateVal instanceof Date)?dateVal:new Date(dateVal);
+  if(isNaN(d))return false;
+  if(fromStr){const f=new Date(fromStr);if(d<f)return false;}
+  if(toStr){const t=new Date(toStr);t.setHours(23,59,59,999);if(d>t)return false;}
+  return true;
+}
 
 let uid='',uname='';
 window.RB={};
+
+/* ===== كاش بيانات محلي لاستخدامه في كشوف الحساب ===== */
+let customersCache={},suppliersCache={},salesCache={},purchasesCache={},collectionsCache={},paymentsCache={};
 
 /* ===== تنقل الصفحات الرئيسية ===== */
 function goPage(pg){
@@ -362,7 +513,7 @@ $('sLoginBtn').addEventListener('click',()=>{const ls=$('loginSection');ls.style
 $('sNext1').addEventListener('click',async()=>{
   const nm=$('sName').value.trim(),code=$('sPersonalCode').value.trim();
   if(!nm){toast('⚠️ اكتبي اسمك!');return;}
-  if(!code||code.length<4){toast('⚠️ اختاري كود 4 أحرف على الأقل!');return;}
+  if(!code||code.length<4){toast('⚠️ اختر كود 4 أحرف على الأقل!');return;}
   const snap=await get(ref(db,'rb_users'));
   let taken=false;snap.forEach(s=>{if((s.val()?.name||'').toLowerCase()===nm.toLowerCase())taken=true;});
   if(taken){toast('❌ الاسم ده مستخدم قبل كده!');return;}
@@ -445,7 +596,7 @@ function listenNotifs(){
 
 /* ===================== محرّك متصفح الكروت العام ===================== */
 function makeBrowser(cfg){
-  // cfg: {prefix, dataRef, renderCard, matchFn, sortFn}
+  // cfg: {prefix, dataRef, renderCard, matchFn, sortFn, onData}
   let full=[],filtered=[],idx=0;
   function render(dir){
     const counter=$(cfg.prefix+'Counter'),stage=$(cfg.prefix+'Card');
@@ -476,6 +627,7 @@ function makeBrowser(cfg){
   onValue(ref(db,cfg.dataRef),snap=>{
     full=snap.val()?Object.values(snap.val()):[];
     if(cfg.sortFn)full.sort(cfg.sortFn);
+    if(cfg.onData)cfg.onData(snap.val()||{});
     applySearch();
   });
   return {refresh:applySearch};
@@ -486,6 +638,7 @@ makeBrowser({
   prefix:'cust',dataRef:'rb_customers',
   matchFn:(c,q)=>(c.name||'').toLowerCase().includes(q)||String(c.code||'').includes(q)||(c.phone||'').includes(q),
   sortFn:(a,b)=>(a.code||0)-(b.code||0),
+  onData:(obj)=>{customersCache=obj;populateStmtSelect('custStmtSelect',obj);},
   renderCard:c=>`
     <span class="bcode-badge">كود ${safeA(c.code)}</span>
     <div class="bname">👤 ${safeA(c.name)}</div>
@@ -499,6 +652,7 @@ makeBrowser({
   prefix:'supp',dataRef:'rb_suppliers',
   matchFn:(c,q)=>(c.name||'').toLowerCase().includes(q)||String(c.code||'').includes(q)||(c.phone||'').includes(q),
   sortFn:(a,b)=>(a.code||0)-(b.code||0),
+  onData:(obj)=>{suppliersCache=obj;populateStmtSelect('suppStmtSelect',obj);},
   renderCard:c=>`
     <span class="bcode-badge">كود ${safeA(c.code)}</span>
     <div class="bname">🚚 ${safeA(c.name)}</div>
@@ -524,6 +678,21 @@ makeBrowser({
     <div class="bfield"><span class="bl">💵 سعر البيع</span><span class="bv">${fmtMoney(c.sellPrice)} جنيه</span></div>
     <div class="bfield"><span class="bl">📈 المكسب</span><span class="bv" style="color:var(--success);">${fmtMoney(profit)} جنيه</span></div>`;
   }
+});
+
+/* ---- كرت المخزن ---- */
+makeBrowser({
+  prefix:'wh',dataRef:'rb_warehouses',
+  matchFn:(c,q)=>(c.name||'').toLowerCase().includes(q)||String(c.code||'').includes(q)||(c.location||'').toLowerCase().includes(q),
+  sortFn:(a,b)=>(a.code||0)-(b.code||0),
+  renderCard:c=>`
+    <span class="bcode-badge">كود ${safeA(c.code)}</span>
+    <div class="bname">🏬 ${safeA(c.name)}</div>
+    <div class="bfield"><span class="bl">📍 موقع المخزن</span><span class="bv">${safeA(c.location)||'—'}</span></div>
+    <div class="bfield"><span class="bl">🏠 العنوان</span><span class="bv">${safeA(c.address)||'—'}</span></div>
+    <div class="bfield"><span class="bl">👨‍💼 مدير المخزن</span><span class="bv">${safeA(c.manager)||'—'}</span></div>
+    <div class="bfield"><span class="bl">📱 هاتف المدير</span><span class="bv">${safeA(c.managerPhone)||'—'}</span></div>
+    <div class="bfield"><span class="bl">📧 البريد الإلكتروني</span><span class="bv">${safeA(c.email)||'—'}</span></div>`
 });
 
 /* ---- شاشة بحث الأصناف المستقلة (ليست بوكس لايف بالاسم/الكود/التصنيف) ---- */
@@ -560,6 +729,7 @@ makeBrowser({
   prefix:'sale',dataRef:'rb_sales_invoices',
   matchFn:(inv,q)=>String(inv.invoiceNo||'').includes(q)||(inv.customerName||'').toLowerCase().includes(q),
   sortFn:(a,b)=>(b.invoiceNo||0)-(a.invoiceNo||0),
+  onData:(obj)=>{salesCache=obj;},
   renderCard:inv=>{
     const items=inv.items||[];
     const total=items.reduce((s,it)=>s+(parseFloat(it.value)||0),0);
@@ -583,6 +753,7 @@ makeBrowser({
   prefix:'purch',dataRef:'rb_purchase_invoices',
   matchFn:(inv,q)=>String(inv.invoiceNo||'').includes(q)||(inv.supplierName||'').toLowerCase().includes(q),
   sortFn:(a,b)=>(b.invoiceNo||0)-(a.invoiceNo||0),
+  onData:(obj)=>{purchasesCache=obj;},
   renderCard:inv=>{
     const items=inv.items||[];
     const total=items.reduce((s,it)=>s+(parseFloat(it.value)||0),0);
@@ -601,6 +772,187 @@ makeBrowser({
   }
 });
 
+/* ---- كرت إذن التحويل المخزني ---- */
+makeBrowser({
+  prefix:'transfer',dataRef:'rb_transfer_vouchers',
+  matchFn:(v,q)=>String(v.voucherNo||'').includes(q),
+  sortFn:(a,b)=>(b.voucherNo||0)-(a.voucherNo||0),
+  renderCard:v=>{
+    const items=v.items||[];
+    const rows=items.map(it=>`<tr><td>${safeA(it.itemName)}</td><td>${fmtMoney(it.qty)}</td><td>${fmtMoney(it.buyValue)}</td><td>${fmtMoney(it.sellValue)}</td></tr>`).join('')||'<tr><td colspan="4" style="color:var(--muted);">لا توجد أصناف مسجلة</td></tr>';
+    return `
+    <span class="bcode-badge">إذن رقم ${safeA(v.voucherNo)}</span>
+    <div class="bname">🔁 تحويل مخزني</div>
+    <div class="bfield"><span class="bl">📅 التاريخ</span><span class="bv">${fmtDate(v.date)}</span></div>
+    <div class="bfield"><span class="bl">📤 صرف من مخزن</span><span class="bv">${safeA(v.fromWarehouseName||v.fromWarehouse)}</span></div>
+    <div class="bfield"><span class="bl">📥 صرف إلى مخزن</span><span class="bv">${safeA(v.toWarehouseName||v.toWarehouse)}</span></div>
+    <table class="items-table"><thead><tr><th>الصنف</th><th>الكمية</th><th>قيمة الشراء</th><th>قيمة البيع</th></tr></thead><tbody>${rows}</tbody></table>
+    ${v.notes?`<div class="bfield" style="margin-top:6px;"><span class="bl">📝 ملاحظات</span><span class="bv">${safeA(v.notes)}</span></div>`:''}`;
+  }
+});
+
+/* ---- كرت اذن استلام نقدية ---- */
+makeBrowser({
+  prefix:'recv',dataRef:'rb_cash_receipts',
+  matchFn:(r,q)=>String(r.no||'').includes(q)||(r.from||'').toLowerCase().includes(q),
+  sortFn:(a,b)=>(b.no||0)-(a.no||0),
+  renderCard:r=>`
+    <span class="bcode-badge">إذن رقم ${safeA(r.no)}</span>
+    <div class="bname">📥 ${safeA(r.from)||'—'}</div>
+    <div class="bfield"><span class="bl">📅 التاريخ</span><span class="bv">${fmtDate(r.date)}</span></div>
+    <div class="bfield"><span class="bl">💰 القيمة</span><span class="bv" style="color:var(--success);">${fmtMoney(r.amount)} جنيه</span></div>
+    <div class="bfield"><span class="bl">📝 بيان الاستلام</span><span class="bv">${safeA(r.desc)||'—'}</span></div>
+    ${r.notes?`<div class="bfield"><span class="bl">🗒️ ملاحظات</span><span class="bv">${safeA(r.notes)}</span></div>`:''}`
+});
+
+/* ---- كرت اذن صرف نقدية ---- */
+makeBrowser({
+  prefix:'pay',dataRef:'rb_cash_payments',
+  matchFn:(r,q)=>String(r.no||'').includes(q)||(r.to||'').toLowerCase().includes(q),
+  sortFn:(a,b)=>(b.no||0)-(a.no||0),
+  renderCard:r=>`
+    <span class="bcode-badge">إذن رقم ${safeA(r.no)}</span>
+    <div class="bname">📤 ${safeA(r.to)||'—'}</div>
+    <div class="bfield"><span class="bl">📅 التاريخ</span><span class="bv">${fmtDate(r.date)}</span></div>
+    <div class="bfield"><span class="bl">💰 القيمة</span><span class="bv" style="color:var(--danger);">${fmtMoney(r.amount)} جنيه</span></div>
+    <div class="bfield"><span class="bl">📝 بيان الصرف</span><span class="bv">${safeA(r.desc)||'—'}</span></div>
+    <div class="bfield"><span class="bl">👤 المستلم</span><span class="bv">${safeA(r.receivedBy)||'—'}</span></div>
+    ${r.voucherType?`<div class="bfield"><span class="bl">🧾 سند الصرف</span><span class="bv">${safeA(r.voucherType)} ${safeA(r.voucherNo)}</span></div>`:''}
+    ${r.notes?`<div class="bfield"><span class="bl">🗒️ ملاحظات</span><span class="bv">${safeA(r.notes)}</span></div>`:''}`
+});
+
+/* ---- كرت اذن تحصيل اقساط ---- */
+makeBrowser({
+  prefix:'instColl',dataRef:'rb_installment_collections',
+  matchFn:(r,q)=>String(r.no||'').includes(q)||(r.customerName||'').toLowerCase().includes(q),
+  sortFn:(a,b)=>(b.no||0)-(a.no||0),
+  onData:(obj)=>{collectionsCache=obj;},
+  renderCard:r=>`
+    <span class="bcode-badge">إذن رقم ${safeA(r.no)}</span>
+    <div class="bname">💳 ${safeA(r.customerName)||'عميل غير محدد'}</div>
+    <div class="bfield"><span class="bl">📅 التاريخ</span><span class="bv">${fmtDate(r.date)}</span></div>
+    <div class="bfield"><span class="bl">💰 قيمة التحصيل</span><span class="bv" style="color:var(--success);">${fmtMoney(r.amount)} جنيه</span></div>
+    <div class="bfield"><span class="bl">📝 بيان التحصيل</span><span class="bv">${safeA(r.desc)||'—'}</span></div>
+    ${r.notes?`<div class="bfield"><span class="bl">🗒️ ملاحظات</span><span class="bv">${safeA(r.notes)}</span></div>`:''}`
+});
+
+/* ---- كرت اذن سداد اقساط ---- */
+makeBrowser({
+  prefix:'instPay',dataRef:'rb_installment_payments',
+  matchFn:(r,q)=>String(r.no||'').includes(q)||(r.supplierName||'').toLowerCase().includes(q),
+  sortFn:(a,b)=>(b.no||0)-(a.no||0),
+  onData:(obj)=>{paymentsCache=obj;},
+  renderCard:r=>`
+    <span class="bcode-badge">إذن رقم ${safeA(r.no)}</span>
+    <div class="bname">💳 ${safeA(r.supplierName)||'مورد غير محدد'}</div>
+    <div class="bfield"><span class="bl">📅 التاريخ</span><span class="bv">${fmtDate(r.date)}</span></div>
+    <div class="bfield"><span class="bl">💰 قيمة المسدد</span><span class="bv" style="color:var(--danger);">${fmtMoney(r.amount)} جنيه</span></div>
+    <div class="bfield"><span class="bl">📝 بيان السداد</span><span class="bv">${safeA(r.desc)||'—'}</span></div>
+    ${r.notes?`<div class="bfield"><span class="bl">🗒️ ملاحظات</span><span class="bv">${safeA(r.notes)}</span></div>`:''}`
+});
+
+/* ===== رصيد الخزينة الإجمالي ===== */
+function refreshTreasuryBalance(){
+  Promise.all([
+    get(ref(db,'rb_treasury_info')),
+    get(ref(db,'rb_cash_receipts')),
+    get(ref(db,'rb_cash_payments'))
+  ]).then(([tSnap,rSnap,pSnap])=>{
+    const opening=parseFloat((tSnap.val()||{}).openingBalance)||0;
+    const receipts=rSnap.exists()?Object.values(rSnap.val()).reduce((s,r)=>s+(parseFloat(r.amount)||0),0):0;
+    const payments=pSnap.exists()?Object.values(pSnap.val()).reduce((s,r)=>s+(parseFloat(r.amount)||0),0):0;
+    const bal=opening+receipts-payments;
+    $('treasuryBalanceBig').textContent=fmtMoney(bal)+' جنيه';
+    $('statTreasury').textContent=fmtMoney(bal);
+  });
+}
+onValue(ref(db,'rb_cash_receipts'),()=>refreshTreasuryBalance());
+onValue(ref(db,'rb_cash_payments'),()=>refreshTreasuryBalance());
+onValue(ref(db,'rb_treasury_info'),()=>refreshTreasuryBalance());
+
+/* ===== كشوف الحساب بين تاريخين ===== */
+function populateStmtSelect(selectId,dataObj){
+  const sel=$(selectId);
+  const currentVal=sel.value;
+  const list=Object.values(dataObj||{}).sort((a,b)=>(a.code||0)-(b.code||0));
+  sel.innerHTML='<option value="">-- اختر --</option>'+list.map(c=>`<option value="${safeA(c.code)}">${safeA(c.code)} - ${safeA(c.name)}</option>`).join('');
+  if(currentVal)sel.value=currentVal;
+}
+
+function buildCustomerStatement(){
+  const code=$('custStmtSelect').value;
+  if(!code){toast('⚠️ اختر عميل الأول!');return;}
+  const cust=customersCache[code];
+  if(!cust){toast('❌ العميل غير موجود في البيانات');return;}
+  const from=$('custStmtFrom').value,to=$('custStmtTo').value;
+  const rows=[];
+  Object.values(salesCache||{}).forEach(inv=>{
+    if(String(inv.customerCode)!==String(code))return;
+    if(!inRange(inv.date,from,to))return;
+    const total=(inv.items||[]).reduce((s,it)=>s+(parseFloat(it.value)||0),0);
+    rows.push({date:inv.date,desc:'فاتورة بيع رقم '+inv.invoiceNo,debit:total,credit:0});
+  });
+  Object.values(collectionsCache||{}).forEach(c=>{
+    if(String(c.customerCode)!==String(code))return;
+    if(!inRange(c.date,from,to))return;
+    rows.push({date:c.date,desc:'تحصيل نقدية: '+(c.desc||'—'),debit:0,credit:parseFloat(c.amount)||0});
+  });
+  rows.sort((a,b)=>new Date(a.date)-new Date(b.date));
+  let bal=parseFloat(cust.openBalance)||0;
+  let totalDebit=0,totalCredit=0;
+  const bodyRows=rows.map(r=>{
+    bal+=r.debit-r.credit;totalDebit+=r.debit;totalCredit+=r.credit;
+    return `<tr><td>${fmtDate(r.date)}</td><td>${safeA(r.desc)}</td><td>${r.debit?fmtMoney(r.debit):'-'}</td><td>${r.credit?fmtMoney(r.credit):'-'}</td><td>${fmtMoney(bal)}</td></tr>`;
+  }).join('')||'<tr><td colspan="5" style="color:var(--muted);">لا توجد حركات في هذه الفترة</td></tr>';
+  $('custStmtResult').innerHTML=`
+    <div class="card">
+      <div class="bname">👤 ${safeA(cust.name)} <span style="font-size:11px;color:var(--muted);">(كود ${safeA(cust.code)})</span></div>
+      <div class="bfield"><span class="bl">📅 الفترة</span><span class="bv">${from?fmtDate(from):'البداية'} → ${to?fmtDate(to):'اليوم'}</span></div>
+      <div class="bfield"><span class="bl">💰 رصيد أول المدة (قبل الحركات)</span><span class="bv">${fmtMoney(cust.openBalance)} جنيه</span></div>
+      <table class="items-table"><thead><tr><th>التاريخ</th><th>البيان</th><th>مدين (عليه)</th><th>دائن (تحصيل)</th><th>الرصيد</th></tr></thead><tbody>${bodyRows}</tbody></table>
+      <div class="inv-total-row"><span>إجمالي مدين / دائن</span><span>${fmtMoney(totalDebit)} / ${fmtMoney(totalCredit)}</span></div>
+      <div class="inv-total-row" style="border-top:2px solid var(--primary-dk);"><span>الرصيد المستحق للعميل حتى الآن</span><span>${fmtMoney(bal)} جنيه</span></div>
+    </div>`;
+}
+$('custStmtBtn').addEventListener('click',buildCustomerStatement);
+
+function buildSupplierStatement(){
+  const code=$('suppStmtSelect').value;
+  if(!code){toast('⚠️ اختر مورد الأول!');return;}
+  const supp=suppliersCache[code];
+  if(!supp){toast('❌ المورد غير موجود في البيانات');return;}
+  const from=$('suppStmtFrom').value,to=$('suppStmtTo').value;
+  const rows=[];
+  Object.values(purchasesCache||{}).forEach(inv=>{
+    if(String(inv.supplierCode)!==String(code))return;
+    if(!inRange(inv.date,from,to))return;
+    const total=(inv.items||[]).reduce((s,it)=>s+(parseFloat(it.value)||0),0);
+    rows.push({date:inv.date,desc:'فاتورة شراء رقم '+inv.invoiceNo,credit:total,debit:0});
+  });
+  Object.values(paymentsCache||{}).forEach(c=>{
+    if(String(c.supplierCode)!==String(code))return;
+    if(!inRange(c.date,from,to))return;
+    rows.push({date:c.date,desc:'سداد نقدية: '+(c.desc||'—'),credit:0,debit:parseFloat(c.amount)||0});
+  });
+  rows.sort((a,b)=>new Date(a.date)-new Date(b.date));
+  let bal=parseFloat(supp.openBalance)||0;
+  let totalDebit=0,totalCredit=0;
+  const bodyRows=rows.map(r=>{
+    bal+=r.credit-r.debit;totalDebit+=r.debit;totalCredit+=r.credit;
+    return `<tr><td>${fmtDate(r.date)}</td><td>${safeA(r.desc)}</td><td>${r.credit?fmtMoney(r.credit):'-'}</td><td>${r.debit?fmtMoney(r.debit):'-'}</td><td>${fmtMoney(bal)}</td></tr>`;
+  }).join('')||'<tr><td colspan="5" style="color:var(--muted);">لا توجد حركات في هذه الفترة</td></tr>';
+  $('suppStmtResult').innerHTML=`
+    <div class="card">
+      <div class="bname">🚚 ${safeA(supp.name)} <span style="font-size:11px;color:var(--muted);">(كود ${safeA(supp.code)})</span></div>
+      <div class="bfield"><span class="bl">📅 الفترة</span><span class="bv">${from?fmtDate(from):'البداية'} → ${to?fmtDate(to):'اليوم'}</span></div>
+      <div class="bfield"><span class="bl">💰 رصيد أول المدة (قبل الحركات)</span><span class="bv">${fmtMoney(supp.openBalance)} جنيه</span></div>
+      <table class="items-table"><thead><tr><th>التاريخ</th><th>البيان</th><th>دائن (فاتورة شراء)</th><th>مدين (مسدد)</th><th>الرصيد</th></tr></thead><tbody>${bodyRows}</tbody></table>
+      <div class="inv-total-row"><span>إجمالي دائن / مدين</span><span>${fmtMoney(totalCredit)} / ${fmtMoney(totalDebit)}</span></div>
+      <div class="inv-total-row" style="border-top:2px solid var(--primary-dk);"><span>المبلغ المستحق للمورد حتى الآن</span><span>${fmtMoney(bal)} جنيه</span></div>
+    </div>`;
+}
+$('suppStmtBtn').addEventListener('click',buildSupplierStatement);
+
 /* ===================== الاستيراد من ملف الإكسل ===================== */
 function pick(row,...keys){for(const k of keys){if(row[k]!==undefined&&row[k]!=='')return row[k];}return '';}
 function findSheet(wb,aliases){
@@ -612,7 +964,7 @@ function findSheet(wb,aliases){
 $('doImport').addEventListener('click',async()=>{
   const f=$('importFile').files[0];
   const statusEl=$('importStatus');
-  if(!f){toast('⚠️ اختاري الملف الأول!');return;}
+  if(!f){toast('⚠️ اختر الملف الأول!');return;}
   statusEl.textContent='⏳ جاري القراءة...';
   try{
     const buf=await f.arrayBuffer();
@@ -625,6 +977,15 @@ $('doImport').addEventListener('click',async()=>{
     const saleMoveRows=findSheet(wb,['حركة البيع','حركة_البيع'])||[];
     const purchInvRows=findSheet(wb,['فاتورة الشراء','فاتورة_الشراء'])||[];
     const purchMoveRows=findSheet(wb,['حركة الشراء','حركة_الشراء'])||[];
+    const whRows=findSheet(wb,['المخازن'])||[];
+    const treasuryRows=findSheet(wb,['الخزينة'])||[];
+    const cashRecvRows=findSheet(wb,['اذن استلام نقدية','اذن_استلام_نقدية'])||[];
+    const cashPayRows=findSheet(wb,['اذن صرف نقدية','اذن_صرف_نقدية'])||[];
+    const instCollRows=findSheet(wb,['اذن تحصيل اقساط','اذن_تحصيل_اقساط'])||[];
+    const instPayRows=findSheet(wb,['اذن سداد اقساط','اذن_سداد_اقساط'])||[];
+    const transferVoucherRows=findSheet(wb,['اذن تحويل مخزني','اذن_تحويل_مخزني'])||[];
+    const transferMoveRows=findSheet(wb,['حركة التحويل المخزني','حركة_التحويل_المخزني'])||[];
+    const basicInfoRows=findSheet(wb,['بيانات اساسية','بيانات_اساسية'])||[];
 
     statusEl.textContent='⏳ جاري تجهيز العملاء والموردين والأصناف...';
 
@@ -642,6 +1003,11 @@ $('doImport').addEventListener('click',async()=>{
     itemRows.forEach(r=>{
       const code=pick(r,'كود الصنف');if(code==='')return;
       itemsObj[code]={code,itemNo:pick(r,'رقم الصنف'),name:pick(r,'اسم الصنف','أسم الصنف'),category:pick(r,'التصنيف'),unit:pick(r,'الوحدة'),buyPrice:pick(r,'سعر الشراء')||0,sellPrice:pick(r,'سعر البيع')||0};
+    });
+    const warehousesObj={};
+    whRows.forEach(r=>{
+      const code=pick(r,'كود المخزن');if(code==='')return;
+      warehousesObj[code]={code,name:pick(r,'أسم المخزن','اسم المخزن'),location:pick(r,'موقع المخزن'),address:pick(r,'العنوان'),manager:pick(r,'مدير المخزن'),managerPhone:pick(r,'هاتف مدير المخزن'),email:pick(r,'البريد الالكتروني')};
     });
 
     statusEl.textContent='⏳ جاري تجهيز الفواتير...';
@@ -690,28 +1056,122 @@ $('doImport').addEventListener('click',async()=>{
       });
     });
 
+    statusEl.textContent='⏳ جاري تجهيز الخزينة والأقساط والتحويلات...';
+
+    // الخزينة (رصيد أول الفترة)
+    let treasuryInfo={openingBalance:0,date:'',notes:''};
+    if(treasuryRows.length){
+      const t=treasuryRows[0];
+      treasuryInfo={openingBalance:pick(t,'رصيد اول الفترة')||0,date:pick(t,'التاريخ'),notes:pick(t,'ملاحظات')};
+    }
+
+    // اذن استلام نقدية
+    const cashReceiptsObj={};
+    cashRecvRows.forEach(r=>{
+      const no=pick(r,'رقم الاذن');if(no==='')return;
+      cashReceiptsObj[no]={no,date:pick(r,'تاريخ الاستلام'),from:pick(r,'مستلم من'),amount:pick(r,'قيمة المستلم')||0,desc:pick(r,'بيان الاستلام'),notes:pick(r,'ملاحظات')};
+    });
+
+    // اذن صرف نقدية
+    const cashPaymentsObj={};
+    cashPayRows.forEach(r=>{
+      const no=pick(r,'رقم الاذن');if(no==='')return;
+      cashPaymentsObj[no]={no,date:pick(r,'تاريخ الصرف'),to:pick(r,'منصرف الي'),amount:pick(r,'قيمة المنصرف')||0,desc:pick(r,'بيان الصرف'),receivedBy:pick(r,'المستلم'),voucherType:pick(r,'سند الصرف'),voucherNo:pick(r,'رقم سند الصرف'),notes:pick(r,'ملاحظات')};
+    });
+
+    // اذن تحصيل اقساط (من العملاء)
+    const instCollObj={};
+    instCollRows.forEach(r=>{
+      const no=pick(r,'رقم الاذن');if(no==='')return;
+      const custCode=pick(r,'اسم العميل','أسم العميل');
+      instCollObj[no]={no,date:pick(r,'تاريخ التحصيل'),customerCode:custCode,customerName:(customersObj[custCode]&&customersObj[custCode].name)||('عميل '+custCode),amount:pick(r,'قيمة التحصيل')||0,desc:pick(r,'بيان التحصيل'),notes:pick(r,'ملاحظات')};
+    });
+
+    // اذن سداد اقساط (للموردين)
+    const instPayObj={};
+    instPayRows.forEach(r=>{
+      const no=pick(r,'رقم الاذن');if(no==='')return;
+      const suppCode=pick(r,'اسم المورد','أسم المورد');
+      instPayObj[no]={no,date:pick(r,'تاريخ السداد'),supplierCode:suppCode,supplierName:(suppliersObj[suppCode]&&suppliersObj[suppCode].name)||('مورد '+suppCode),amount:pick(r,'قيمة المسدد')||0,desc:pick(r,'بيان السداد'),notes:pick(r,'ملاحظات')};
+    });
+
+    // اذن تحويل مخزني + حركاته
+    const transferObj={};
+    transferVoucherRows.forEach(r=>{
+      const no=pick(r,'رقم الاذن');if(no==='')return;
+      const fromWh=pick(r,'صرف من مخزن'),toWh=pick(r,'صرف الى مخزن');
+      transferObj[no]={
+        voucherNo:no,date:pick(r,'التاريخ'),
+        fromWarehouse:fromWh,fromWarehouseName:(warehousesObj[fromWh]&&warehousesObj[fromWh].name)||fromWh,
+        toWarehouse:toWh,toWarehouseName:(warehousesObj[toWh]&&warehousesObj[toWh].name)||toWh,
+        notes:pick(r,'ملاحظات'),items:[]
+      };
+    });
+    transferMoveRows.forEach(r=>{
+      const voucherNo=pick(r,'رقم الاذن');if(voucherNo===''||!transferObj[voucherNo])return;
+      const itemCode=pick(r,'اسم الصنف','أسم الصنف');
+      transferObj[voucherNo].items.push({
+        itemCode,itemName:(itemsObj[itemCode]&&itemsObj[itemCode].name)||('صنف '+itemCode),
+        qty:pick(r,'الكمية المحولة')||0,buyValue:pick(r,'قيمة الشراء')||0,sellValue:pick(r,'قيمة البيع')||0
+      });
+    });
+
+    // بيانات أساسية (بيانات المنشأة)
+    let basicInfo=null;
+    if(basicInfoRows.length){
+      const b=basicInfoRows[0];
+      basicInfo={
+        companyName:pick(b,'أسم المنشأة','اسم المنشأة'),address:pick(b,'العنوان'),phone:pick(b,'رقم الهاتف'),
+        paperCurrency:pick(b,'العملة الورقية'),coinCurrency:pick(b,'العملة المعدنية'),
+        sellerName:pick(b,'أسم البائع','اسم البائع'),taxRegNo:pick(b,'رقم التسجيل الضريبي')
+      };
+    }
+
     statusEl.textContent='⏳ جاري الرفع لقاعدة البيانات...';
     await set(ref(db,'rb_customers'),customersObj);
     await set(ref(db,'rb_suppliers'),suppliersObj);
     await set(ref(db,'rb_items'),itemsObj);
     await set(ref(db,'rb_sales_invoices'),salesObj);
     await set(ref(db,'rb_purchase_invoices'),purchObj);
+    await set(ref(db,'rb_warehouses'),warehousesObj);
+    await set(ref(db,'rb_treasury_info'),treasuryInfo);
+    await set(ref(db,'rb_cash_receipts'),cashReceiptsObj);
+    await set(ref(db,'rb_cash_payments'),cashPaymentsObj);
+    await set(ref(db,'rb_installment_collections'),instCollObj);
+    await set(ref(db,'rb_installment_payments'),instPayObj);
+    await set(ref(db,'rb_transfer_vouchers'),transferObj);
+    if(basicInfo)await set(ref(db,'rb_basic_info'),basicInfo);
 
     // إشعار كل المستخدمين التانيين إن فيه نسخة بيانات جديدة اتحطت
     const usersSnap=await get(ref(db,'rb_users'));
     usersSnap.forEach(s=>{
-      pushNotif(s.key,'📥',(uname||'حد')+' حطت نسخة بيانات جديدة على النظام',{type:'account'});
+      pushNotif(s.key,'📥',(uname||'حد')+' حط نسخة بيانات جديدة على النظام',{type:'account'});
     });
 
     statusEl.textContent='✅ تم التحديث بنجاح!';
-    toast(`✅ اتحدثت البيانات: ${Object.keys(customersObj).length} عميل، ${Object.keys(suppliersObj).length} مورد، ${Object.keys(itemsObj).length} صنف، ${Object.keys(salesObj).length} فاتورة بيع، ${Object.keys(purchObj).length} فاتورة شراء`);
-    setTimeout(()=>{$('mImport').classList.remove('open');refreshDashboard();},1200);
+    toast(`✅ اتحدثت البيانات: ${Object.keys(customersObj).length} عميل، ${Object.keys(suppliersObj).length} مورد، ${Object.keys(itemsObj).length} صنف، ${Object.keys(salesObj).length} فاتورة بيع، ${Object.keys(purchObj).length} فاتورة شراء، ${Object.keys(warehousesObj).length} مخزن، ${Object.keys(cashReceiptsObj).length} إذن استلام، ${Object.keys(cashPaymentsObj).length} إذن صرف`);
+    setTimeout(()=>{$('mImport').classList.remove('open');refreshDashboard();refreshTreasuryBalance();showCompanyInfo();},1200);
   }catch(e){
     console.error(e);
     statusEl.textContent='❌ حصل خطأ: '+e.message;
     toast('❌ حصل خطأ في قراءة الملف، تأكدي إنه نفس الملف المُصدَّر من الأكسس');
   }
 });
+
+/* ===== عرض بيانات المنشأة في صفحة حسابي ===== */
+function showCompanyInfo(){
+  get(ref(db,'rb_basic_info')).then(s=>{
+    if(!s.exists())return;
+    const b=s.val();
+    $('companyInfoCard').style.display='block';
+    $('companyInfoBody').innerHTML=`
+      <div class="bfield"><span class="bl">🏢 اسم المنشأة</span><span class="bv">${safeA(b.companyName)||'—'}</span></div>
+      <div class="bfield"><span class="bl">📍 العنوان</span><span class="bv">${safeA(b.address)||'—'}</span></div>
+      <div class="bfield"><span class="bl">📱 الهاتف</span><span class="bv">${safeA(b.phone)||'—'}</span></div>
+      <div class="bfield"><span class="bl">👤 اسم البائع</span><span class="bv">${safeA(b.sellerName)||'—'}</span></div>
+      ${b.taxRegNo?`<div class="bfield"><span class="bl">🧾 رقم التسجيل الضريبي</span><span class="bv">${safeA(b.taxRegNo)}</span></div>`:''}`;
+  });
+}
 
 /* ===== لوحة الرئيسية ===== */
 function refreshDashboard(){
@@ -734,7 +1194,7 @@ function refreshDashboard(){
 function init(){
   uid=uid||localStorage.getItem('rb_uid')||'';
   uname=uname||localStorage.getItem('rb_name')||'';
-  refreshDashboard();listenNotifs();
+  refreshDashboard();listenNotifs();refreshTreasuryBalance();showCompanyInfo();
   setTimeout(requestNotifPermission,1500);
 }
 
