@@ -192,7 +192,7 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
 
 <header>
   <div class="logo"><div class="mark">🏠</div>رزق البنات</div>
-  <div class="hright"><button class="icbtn" id="notifBtn">HwArY<span class="ndot" id="ndot"></span></button></div>
+  <div class="hright"><button class="icbtn" id="notifBtn">🔔<span class="ndot" id="ndot"></span></button></div>
 </header>
 
 <nav class="tnav">
@@ -565,11 +565,38 @@ const $=id=>document.getElementById(id);
 function toast(m){const t=$('toast');t.textContent=m;t.className='toast show';setTimeout(()=>t.className='toast',2900);}
 function safeA(s){return(s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,"&#39;").replace(/"/g,'&quot;');}
 function fmtMoney(n){n=parseFloat(n)||0;return n.toLocaleString('ar-EG',{maximumFractionDigits:2});}
-function fmtDate(v){if(!v)return'—';try{const d=(v instanceof Date)?v:new Date(v);if(isNaN(d))return safeA(v);return d.toLocaleDateString('ar-EG');}catch(e){return safeA(v);}}
+function excelSerialToDate(serial){
+  const utcDays=Math.floor(serial-25569);
+  const utcValue=utcDays*86400;
+  const d=new Date(utcValue*1000);
+  const frac=serial-Math.floor(serial);
+  if(frac>0){const secs=Math.round(frac*86400);d.setSeconds(d.getSeconds()+secs);}
+  return d;
+}
+function parseAnyDate(v){
+  if(v==null||v===''||v==='0')return null;
+  if(v instanceof Date)return isNaN(v)?null:v;
+  if(typeof v==='number')return excelSerialToDate(v);
+  if(typeof v==='string'){
+    const s=v.trim();
+    if(!s)return null;
+    // رقم تسلسلي إكسل مكتوب كنص
+    if(/^\d+(\.\d+)?$/.test(s))return excelSerialToDate(parseFloat(s));
+    // yyyy-mm-dd أو yyyy/mm/dd
+    let m=s.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+    if(m){const d=new Date(+m[1],+m[2]-1,+m[3]);if(!isNaN(d))return d;}
+    // dd/mm/yyyy أو dd-mm-yyyy
+    m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+    if(m){const d=new Date(+m[3],+m[2]-1,+m[1]);if(!isNaN(d))return d;}
+    const d=new Date(s);
+    if(!isNaN(d))return d;
+  }
+  return null;
+}
+function fmtDate(v){const d=parseAnyDate(v);if(!d)return'—';return d.toLocaleDateString('ar-EG');}
 function inRange(dateVal,fromStr,toStr){
-  if(!dateVal)return!fromStr&&!toStr;
-  const d=(dateVal instanceof Date)?dateVal:new Date(dateVal);
-  if(isNaN(d))return false;
+  const d=parseAnyDate(dateVal);
+  if(!d)return!fromStr&&!toStr;
   if(fromStr){const f=new Date(fromStr);if(d<f)return false;}
   if(toStr){const t=new Date(toStr);t.setHours(23,59,59,999);if(d>t)return false;}
   return true;
@@ -1090,33 +1117,25 @@ function buildCustomerStatement(){
   const cust=customersCache[code];
   if(!cust){toast('❌ العميل غير موجود في البيانات');return;}
   const from=$('custStmtFrom').value,to=$('custStmtTo').value;
-  const rows=[];
+  let totalRemaining=0;
   Object.values(salesCache||{}).forEach(inv=>{
     if(String(inv.customerCode)!==String(code))return;
     if(!inRange(inv.date,from,to))return;
     const total=(inv.items||[]).reduce((s,it)=>s+(parseFloat(it.value)||0),0);
-    rows.push({date:inv.date,desc:'فاتورة بيع رقم '+inv.invoiceNo,debit:total,credit:0});
+    const paid=parseFloat(inv.paid)||0;
+    totalRemaining+=(total-paid);
   });
   Object.values(collectionsCache||{}).forEach(c=>{
     if(String(c.customerCode)!==String(code))return;
     if(!inRange(c.date,from,to))return;
-    rows.push({date:c.date,desc:'تحصيل نقدية: '+(c.desc||'—'),debit:0,credit:parseFloat(c.amount)||0});
+    totalRemaining-=(parseFloat(c.amount)||0);
   });
-  rows.sort((a,b)=>new Date(a.date)-new Date(b.date));
-  let bal=parseFloat(cust.openBalance)||0;
-  let totalDebit=0,totalCredit=0;
-  const bodyRows=rows.map(r=>{
-    bal+=r.debit-r.credit;totalDebit+=r.debit;totalCredit+=r.credit;
-    return `<tr><td>${fmtDate(r.date)}</td><td>${safeA(r.desc)}</td><td>${r.debit?fmtMoney(r.debit):'-'}</td><td>${r.credit?fmtMoney(r.credit):'-'}</td><td>${fmtMoney(bal)}</td></tr>`;
-  }).join('')||'<tr><td colspan="5" style="color:var(--muted);">لا توجد حركات في هذه الفترة</td></tr>';
   $('custStmtResult').innerHTML=`
     <div class="card">
       <div class="bname">👤 ${safeA(cust.name)} <span style="font-size:11px;color:var(--muted);">(كود ${safeA(cust.code)})</span></div>
       <div class="bfield"><span class="bl">📅 الفترة</span><span class="bv">${from?fmtDate(from):'البداية'} → ${to?fmtDate(to):'اليوم'}</span></div>
-      <div class="bfield"><span class="bl">💰 رصيد أول المدة (قبل الحركات)</span><span class="bv">${fmtMoney(cust.openBalance)} جنيه</span></div>
-      <table class="items-table"><thead><tr><th>التاريخ</th><th>البيان</th><th>مدين (عليه)</th><th>دائن (تحصيل)</th><th>الرصيد</th></tr></thead><tbody>${bodyRows}</tbody></table>
-      <div class="inv-total-row"><span>إجمالي مدين / دائن</span><span>${fmtMoney(totalDebit)} / ${fmtMoney(totalCredit)}</span></div>
-      <div class="inv-total-row" style="border-top:2px solid var(--primary-dk);"><span>الرصيد المستحق على العميل حتى الآن</span><span>${fmtMoney(bal)} جنيه</span></div>
+      <div class="bfield"><span class="bl">ℹ️ رصيد أول المدة</span><span class="bv">${fmtMoney(cust.openBalance)} جنيه</span></div>
+      <div class="inv-total-row" style="border-top:2px solid var(--primary-dk);"><span>الباقي المستحق على العميل خلال الفترة</span><span>${fmtMoney(totalRemaining)} جنيه</span></div>
     </div>`;
 }
 $('custStmtBtn').addEventListener('click',buildCustomerStatement);
@@ -1127,42 +1146,49 @@ function buildSupplierStatement(){
   const supp=suppliersCache[code];
   if(!supp){toast('❌ المورد غير موجود في البيانات');return;}
   const from=$('suppStmtFrom').value,to=$('suppStmtTo').value;
-  const rows=[];
+  let totalRemaining=0;
   Object.values(purchasesCache||{}).forEach(inv=>{
     if(String(inv.supplierCode)!==String(code))return;
     if(!inRange(inv.date,from,to))return;
     const total=(inv.items||[]).reduce((s,it)=>s+(parseFloat(it.value)||0),0);
-    rows.push({date:inv.date,desc:'فاتورة شراء رقم '+inv.invoiceNo,credit:total,debit:0});
+    const paid=parseFloat(inv.paid)||0;
+    totalRemaining+=(total-paid);
   });
   Object.values(paymentsCache||{}).forEach(c=>{
     if(String(c.supplierCode)!==String(code))return;
     if(!inRange(c.date,from,to))return;
-    rows.push({date:c.date,desc:'سداد نقدية: '+(c.desc||'—'),credit:0,debit:parseFloat(c.amount)||0});
+    totalRemaining-=(parseFloat(c.amount)||0);
   });
-  rows.sort((a,b)=>new Date(a.date)-new Date(b.date));
-  let bal=parseFloat(supp.openBalance)||0;
-  let totalDebit=0,totalCredit=0;
-  const bodyRows=rows.map(r=>{
-    bal+=r.credit-r.debit;totalDebit+=r.debit;totalCredit+=r.credit;
-    return `<tr><td>${fmtDate(r.date)}</td><td>${safeA(r.desc)}</td><td>${r.credit?fmtMoney(r.credit):'-'}</td><td>${r.debit?fmtMoney(r.debit):'-'}</td><td>${fmtMoney(bal)}</td></tr>`;
-  }).join('')||'<tr><td colspan="5" style="color:var(--muted);">لا توجد حركات في هذه الفترة</td></tr>';
   $('suppStmtResult').innerHTML=`
     <div class="card">
       <div class="bname">🚚 ${safeA(supp.name)} <span style="font-size:11px;color:var(--muted);">(كود ${safeA(supp.code)})</span></div>
       <div class="bfield"><span class="bl">📅 الفترة</span><span class="bv">${from?fmtDate(from):'البداية'} → ${to?fmtDate(to):'اليوم'}</span></div>
-      <div class="bfield"><span class="bl">💰 رصيد أول المدة (قبل الحركات)</span><span class="bv">${fmtMoney(supp.openBalance)} جنيه</span></div>
-      <table class="items-table"><thead><tr><th>التاريخ</th><th>البيان</th><th>دائن (فاتورة شراء)</th><th>مدين (مسدد)</th><th>الرصيد</th></tr></thead><tbody>${bodyRows}</tbody></table>
-      <div class="inv-total-row"><span>إجمالي دائن / مدين</span><span>${fmtMoney(totalCredit)} / ${fmtMoney(totalDebit)}</span></div>
-      <div class="inv-total-row" style="border-top:2px solid var(--primary-dk);"><span>المبلغ المستحق للمورد حتى الآن</span><span>${fmtMoney(bal)} جنيه</span></div>
+      <div class="bfield"><span class="bl">ℹ️ رصيد أول المدة</span><span class="bv">${fmtMoney(supp.openBalance)} جنيه</span></div>
+      <div class="inv-total-row" style="border-top:2px solid var(--primary-dk);"><span>الباقي المستحق للمورد خلال الفترة</span><span>${fmtMoney(totalRemaining)} جنيه</span></div>
     </div>`;
 }
 $('suppStmtBtn').addEventListener('click',buildSupplierStatement);
 
 /* ===================== الاستيراد من ملف الإكسل ===================== */
 function pick(row,...keys){for(const k of keys){if(row[k]!==undefined&&row[k]!=='')return row[k];}return '';}
+function pickDate(row,...keys){
+  const v=pick(row,...keys);
+  if(v instanceof Date)return isNaN(v)?'':v.toISOString();
+  return v;
+}
 function findSheet(wb,aliases){
   const norm=s=>s.replace(/[\s_]+/g,'');
-  for(const name of wb.SheetNames){if(aliases.some(a=>norm(name)===norm(a)))return XLSX.utils.sheet_to_json(wb.Sheets[name],{defval:''});}
+  for(const name of wb.SheetNames){
+    if(aliases.some(a=>norm(name)===norm(a))){
+      const raw=XLSX.utils.sheet_to_json(wb.Sheets[name],{defval:''});
+      // تنظيف أسماء الأعمدة من مسافات زيادة عشان الـ pick() ميفوتش القيمة
+      return raw.map(row=>{
+        const clean={};
+        Object.keys(row).forEach(k=>{clean[k.replace(/\s+/g,' ').trim()]=row[k];});
+        return clean;
+      });
+    }
+  }
   return null;
 }
 
@@ -1224,7 +1250,7 @@ $('doImport').addEventListener('click',async()=>{
       const no=pick(r,'رقم الفاتورة');if(no==='')return;
       const custCode=pick(r,'أسم العميل','اسم العميل');
       salesObj[no]={
-        invoiceNo:no,date:pick(r,'تاريخ البيع'),
+        invoiceNo:no,date:pickDate(r,'تاريخ البيع','تاريخ الانشاء'),
         customerCode:custCode,customerName:(customersObj[custCode]&&customersObj[custCode].name)||'',
         type:pick(r,'نوع الفاتورة'),notes:pick(r,'ملاحظات'),
         taxPercent:pick(r,'نسبة الضريبة')||0,discount:pick(r,'الخصم')||0,paid:pick(r,'المدفوع')||0,
@@ -1246,7 +1272,7 @@ $('doImport').addEventListener('click',async()=>{
       const no=pick(r,'رقم الفاتورة');if(no==='')return;
       const suppCode=pick(r,'أسم المورد','اسم المورد');
       purchObj[no]={
-        invoiceNo:no,date:pick(r,'تاريخ الشراء'),
+        invoiceNo:no,date:pickDate(r,'تاريخ الشراء','تاريخ الانشاء'),
         supplierCode:suppCode,supplierName:(suppliersObj[suppCode]&&suppliersObj[suppCode].name)||'',
         type:pick(r,'نوع الفاتورة'),notes:pick(r,'ملاحظات'),
         taxPercent:pick(r,'نسبة الضريبة')||0,discount:pick(r,'الخصم')||0,paid:pick(r,'المدفوع')||0,
@@ -1284,21 +1310,21 @@ $('doImport').addEventListener('click',async()=>{
     let treasuryInfo={openingBalance:0,date:'',notes:''};
     if(treasuryRows.length){
       const t=treasuryRows[0];
-      treasuryInfo={openingBalance:pick(t,'رصيد اول الفترة')||0,date:pick(t,'التاريخ'),notes:pick(t,'ملاحظات')};
+      treasuryInfo={openingBalance:pick(t,'رصيد اول الفترة')||0,date:pickDate(t,'التاريخ'),notes:pick(t,'ملاحظات')};
     }
 
     // اذن استلام نقدية
     const cashReceiptsObj={};
     cashRecvRows.forEach(r=>{
       const no=pick(r,'رقم الاذن');if(no==='')return;
-      cashReceiptsObj[no]={no,date:pick(r,'تاريخ الاستلام'),from:pick(r,'مستلم من'),amount:pick(r,'قيمة المستلم')||0,desc:pick(r,'بيان الاستلام'),notes:pick(r,'ملاحظات')};
+      cashReceiptsObj[no]={no,date:pickDate(r,'تاريخ الاستلام','تاريخ الانشاء'),from:pick(r,'مستلم من'),amount:pick(r,'قيمة المستلم')||0,desc:pick(r,'بيان الاستلام'),notes:pick(r,'ملاحظات')};
     });
 
     // اذن صرف نقدية
     const cashPaymentsObj={};
     cashPayRows.forEach(r=>{
       const no=pick(r,'رقم الاذن');if(no==='')return;
-      cashPaymentsObj[no]={no,date:pick(r,'تاريخ الصرف'),to:pick(r,'منصرف الي'),amount:pick(r,'قيمة المنصرف')||0,desc:pick(r,'بيان الصرف'),receivedBy:pick(r,'المستلم'),voucherType:pick(r,'سند الصرف'),voucherNo:pick(r,'رقم سند الصرف'),notes:pick(r,'ملاحظات')};
+      cashPaymentsObj[no]={no,date:pickDate(r,'تاريخ الصرف','تاريخ الانشاء'),to:pick(r,'منصرف الي'),amount:pick(r,'قيمة المنصرف')||0,desc:pick(r,'بيان الصرف'),receivedBy:pick(r,'المستلم'),voucherType:pick(r,'سند الصرف'),voucherNo:pick(r,'رقم سند الصرف'),notes:pick(r,'ملاحظات')};
     });
 
     // اذن تحصيل اقساط (من العملاء)
@@ -1306,7 +1332,7 @@ $('doImport').addEventListener('click',async()=>{
     instCollRows.forEach(r=>{
       const no=pick(r,'رقم الاذن');if(no==='')return;
       const custCode=pick(r,'اسم العميل','أسم العميل');
-      instCollObj[no]={no,date:pick(r,'تاريخ التحصيل'),customerCode:custCode,customerName:(customersObj[custCode]&&customersObj[custCode].name)||('عميل '+custCode),amount:pick(r,'قيمة التحصيل')||0,desc:pick(r,'بيان التحصيل'),notes:pick(r,'ملاحظات')};
+      instCollObj[no]={no,date:pickDate(r,'تاريخ التحصيل','تاريخ الانشاء'),customerCode:custCode,customerName:(customersObj[custCode]&&customersObj[custCode].name)||('عميل '+custCode),amount:pick(r,'قيمة التحصيل')||0,desc:pick(r,'بيان التحصيل'),notes:pick(r,'ملاحظات')};
     });
 
     // اذن سداد اقساط (للموردين)
@@ -1314,7 +1340,7 @@ $('doImport').addEventListener('click',async()=>{
     instPayRows.forEach(r=>{
       const no=pick(r,'رقم الاذن');if(no==='')return;
       const suppCode=pick(r,'اسم المورد','أسم المورد');
-      instPayObj[no]={no,date:pick(r,'تاريخ السداد'),supplierCode:suppCode,supplierName:(suppliersObj[suppCode]&&suppliersObj[suppCode].name)||('مورد '+suppCode),amount:pick(r,'قيمة المسدد')||0,desc:pick(r,'بيان السداد'),notes:pick(r,'ملاحظات')};
+      instPayObj[no]={no,date:pickDate(r,'تاريخ السداد','تاريخ الانشاء'),supplierCode:suppCode,supplierName:(suppliersObj[suppCode]&&suppliersObj[suppCode].name)||('مورد '+suppCode),amount:pick(r,'قيمة المسدد')||0,desc:pick(r,'بيان السداد'),notes:pick(r,'ملاحظات')};
     });
 
     // اذن تحويل مخزني + حركاته
@@ -1323,7 +1349,7 @@ $('doImport').addEventListener('click',async()=>{
       const no=pick(r,'رقم الاذن');if(no==='')return;
       const fromWh=pick(r,'صرف من مخزن'),toWh=pick(r,'صرف الى مخزن');
       transferObj[no]={
-        voucherNo:no,date:pick(r,'التاريخ'),
+        voucherNo:no,date:pickDate(r,'التاريخ','تاريخ الانشاء'),
         fromWarehouse:fromWh,fromWarehouseName:(warehousesObj[fromWh]&&warehousesObj[fromWh].name)||fromWh,
         toWarehouse:toWh,toWarehouseName:(warehousesObj[toWh]&&warehousesObj[toWh].name)||toWh,
         notes:pick(r,'ملاحظات'),items:[]
