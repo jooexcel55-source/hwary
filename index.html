@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -1208,7 +1209,7 @@ function buildCustomerStatement(){
   $('custStmtResult').innerHTML=`
     <div class="card">
       <div class="bname">👤 ${safeA(cust.name)} <span style="font-size:11px;color:var(--muted);">(كود ${safeA(cust.code)})</span></div>
-      <div class="bfield"><span class="bl">📅 الفترة</span><span class="bv">${from?fmtDate(from):'البداية'} → ${to?fmtDate(to):'اليوم'}</span></div>
+      <div class="bfield"><span class="bl">📅 الفترة</span><span class="bv">${from?fmtDate(from):'البداية'}   >   ${to?fmtDate(to):'اليوم'}</span></div>
       <div class="bfield"><span class="bl">ℹ️ رصيد أول المدة</span><span class="bv">${fmtMoney(cust.openBalance)} جنيه</span></div>
       <div class="inv-total-row" style="border-top:2px solid var(--primary-dk);"><span>الباقي المستحق على العميل خلال الفترة</span><span>${fmtMoney(totalRemaining)} جنيه</span></div>
     </div>`;
@@ -1242,7 +1243,7 @@ function buildSupplierStatement(){
   $('suppStmtResult').innerHTML=`
     <div class="card">
       <div class="bname">🚚 ${safeA(supp.name)} <span style="font-size:11px;color:var(--muted);">(كود ${safeA(supp.code)})</span></div>
-      <div class="bfield"><span class="bl">📅 الفترة</span><span class="bv">${from?fmtDate(from):'البداية'} → ${to?fmtDate(to):'اليوم'}</span></div>
+      <div class="bfield"><span class="bl">📅 الفترة</span><span class="bv">${from?fmtDate(from):'البداية'}  >   ${to?fmtDate(to):'اليوم'}</span></div>
       <div class="bfield"><span class="bl">ℹ️ رصيد أول المدة</span><span class="bv">${fmtMoney(supp.openBalance)} جنيه</span></div>
       <div class="inv-total-row" style="border-top:2px solid var(--primary-dk);"><span>الباقي المستحق للمورد خلال الفترة</span><span>${fmtMoney(totalRemaining)} جنيه</span></div>
     </div>`;
