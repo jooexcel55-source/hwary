@@ -645,7 +645,7 @@ function parseAnyDate(v){
 function fmtDate(v){const d=parseAnyDate(v);if(!d)return'—';return d.toLocaleDateString('ar-EG');}
 function inRange(dateVal,fromStr,toStr){
   const d=parseAnyDate(dateVal);
-  if(!d)return!fromStr&&!toStr;
+  if(!d)return true;   // التاريخ الفاضي/الغلط يفضل موجود، زي ما بيحصل في حساب الكرت
   if(fromStr){const f=new Date(fromStr);if(d<f)return false;}
   if(toStr){const t=new Date(toStr);t.setHours(23,59,59,999);if(d>t)return false;}
   return true;
@@ -847,7 +847,7 @@ makeBrowser({
     <div class="bfield"><span class="bl">📱 رقم الهاتف</span><span class="bv">${safeA(c.phone)||'—'}</span></div>
     <div class="bfield"><span class="bl">📍 العنوان</span><span class="bv">${safeA(c.address)||'—'}</span></div>
     <div class="bfield"><span class="bl">💰 رصيد أول المدة</span><span class="bv">${fmtMoney(c.openBalance)} جنيه</span></div>
-    <div class="bfield"><span class="bl">📊 إجمالي المستحق</span><span class="bv" style="color:${(parseFloat(c.totalDue)||0)>0?'var(--danger)':'var(--success)'};">${fmtMoney(c.totalDue)} جنيه</span></div>`
+    `
 });
 
 /* ---- كرت المورد ---- */
@@ -867,7 +867,7 @@ makeBrowser({
     <div class="bfield"><span class="bl">📱 رقم الهاتف</span><span class="bv">${safeA(c.phone)||'—'}</span></div>
     <div class="bfield"><span class="bl">📍 العنوان</span><span class="bv">${safeA(c.address)||'—'}</span></div>
     <div class="bfield"><span class="bl">💰 رصيد أول المدة</span><span class="bv">${fmtMoney(c.openBalance)} جنيه</span></div>
-    <div class="bfield"><span class="bl">📊 إجمالي المستحق</span><span class="bv" style="color:${(parseFloat(c.totalDue)||0)>0?'var(--danger)':'var(--success)'};">${fmtMoney(c.totalDue)} جنيه</span></div>`
+    `
 });
 
 /* ---- كرت الصنف ---- */
