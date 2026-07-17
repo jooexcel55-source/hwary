@@ -25,8 +25,7 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
-body.no-scroll{overflow:hidden;height:100vh;position:fixed;width:100
-  ;}
+body.no-scroll{overflow:hidden;height:100vh;position:fixed;width:100%;}
 img{max-width:100%;}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   background:
@@ -521,8 +520,14 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
           <div class="stmt-dropdown" id="custStmtList"></div>
         </div>
         <div class="date-range-row">
-          <input type="date" class="mc-input" id="custStmtFrom">
-          <input type="date" class="mc-input" id="custStmtTo">
+          <div style="flex:1;">
+            <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:4px;">من تاريخ</div>
+            <input type="date" class="mc-input" id="custStmtFrom">
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:4px;">إلى تاريخ</div>
+            <input type="date" class="mc-input" id="custStmtTo">
+          </div>
         </div>
         <button class="mc-btn" style="width:100%;" id="custStmtBtn">📊 عرض كشف الحساب</button>
       </div>
@@ -538,8 +543,14 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
           <div class="stmt-dropdown" id="suppStmtList"></div>
         </div>
         <div class="date-range-row">
-          <input type="date" class="mc-input" id="suppStmtFrom">
-          <input type="date" class="mc-input" id="suppStmtTo">
+          <div style="flex:1;">
+            <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:4px;">من تاريخ</div>
+            <input type="date" class="mc-input" id="suppStmtFrom">
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:4px;">إلى تاريخ</div>
+            <input type="date" class="mc-input" id="suppStmtTo">
+          </div>
         </div>
         <button class="mc-btn" style="width:100%;" id="suppStmtBtn">📊 عرض كشف الحساب</button>
       </div>
@@ -1175,7 +1186,8 @@ function buildCustomerStatement(){
   if(!code){toast('⚠️ اختر عميل الأول!');return;}
   const cust=customersCache[code];
   if(!cust){toast('❌ العميل غير موجود في البيانات');return;}
-  const from=$('custStmtFrom').value,to=$('custStmtTo').value;
+  let from=$('custStmtFrom').value,to=$('custStmtTo').value;
+  if(from&&to&&new Date(from)>new Date(to)){const tmp=from;from=to;to=tmp;}
   let totalRemaining=parseFloat(cust.openBalance)||0;
   Object.values(salesCache||{}).forEach(inv=>{
     if(String(inv.customerCode)!==String(code))return;
@@ -1185,7 +1197,7 @@ function buildCustomerStatement(){
     const taxPercent=parseFloat(inv.taxPercent)||0;
     const paid=parseFloat(inv.paid)||0;
     // نفس معادلة الأكسس: (الإجمالي - الخصم) + الضريبة - المدفوع
-    const invoiceRemaining=(subtotal-discount-paid)*(1+taxPercent/100);
+    const invoiceRemaining=(subtotal-discount-paid)*(1+taxPercent);
     totalRemaining+=invoiceRemaining;
   });
   Object.values(collectionsCache||{}).forEach(c=>{
@@ -1208,7 +1220,8 @@ function buildSupplierStatement(){
   if(!code){toast('⚠️ اختر مورد الأول!');return;}
   const supp=suppliersCache[code];
   if(!supp){toast('❌ المورد غير موجود في البيانات');return;}
-  const from=$('suppStmtFrom').value,to=$('suppStmtTo').value;
+  let from=$('suppStmtFrom').value,to=$('suppStmtTo').value;
+  if(from&&to&&new Date(from)>new Date(to)){const tmp=from;from=to;to=tmp;}
   let totalRemaining=parseFloat(supp.openBalance)||0;
   Object.values(purchasesCache||{}).forEach(inv=>{
     if(String(inv.supplierCode)!==String(code))return;
@@ -1218,7 +1231,7 @@ function buildSupplierStatement(){
     const taxPercent=parseFloat(inv.taxPercent)||0;
     const paid=parseFloat(inv.paid)||0;
     // نفس معادلة الأكسس: (الإجمالي - الخصم) + الضريبة - المدفوع
-    const invoiceRemaining=(subtotal-discount-paid)*(1+taxPercent/100);
+    const invoiceRemaining=(subtotal-discount-paid)*(1+taxPercent);
     totalRemaining+=invoiceRemaining;
   });
   Object.values(paymentsCache||{}).forEach(c=>{
@@ -1320,7 +1333,7 @@ $('doImport').addEventListener('click',async()=>{
         invoiceNo:no,date:pickDate(r,'تاريخ البيع','تاريخ الانشاء'),
         customerCode:custCode,customerName:(customersObj[custCode]&&customersObj[custCode].name)||'',
         type:pick(r,'نوع الفاتورة'),notes:pick(r,'ملاحظات'),
-        taxPercent:(parseFloat(pick(r,'نسبة الضريبة'))||0)/10,discount:pick(r,'الخصم')||0,paid:pick(r,'المدفوع')||0,
+        taxPercent:pick(r,'نسبة الضريبة')||0,discount:pick(r,'الخصم')||0,paid:pick(r,'المدفوع')||0,
         items:[]
       };
     });
@@ -1346,7 +1359,7 @@ $('doImport').addEventListener('click',async()=>{
         invoiceNo:no,date:pickDate(r,'تاريخ الشراء','تاريخ الانشاء'),
         supplierCode:suppCode,supplierName:(suppliersObj[suppCode]&&suppliersObj[suppCode].name)||'',
         type:pick(r,'نوع الفاتورة'),notes:pick(r,'ملاحظات'),
-        taxPercent:(parseFloat(pick(r,'نسبة الضريبة'))||0)/10,discount:pick(r,'الخصم')||0,paid:pick(r,'المدفوع')||0,
+        taxPercent:pick(r,'نسبة الضريبة')||0,discount:pick(r,'الخصم')||0,paid:pick(r,'المدفوع')||0,
         items:[]
       };
     });
@@ -1463,7 +1476,7 @@ $('doImport').addEventListener('click',async()=>{
       const discount=parseFloat(inv.discount)||0;
       const taxPercent=parseFloat(inv.taxPercent)||0;
       const paid=parseFloat(inv.paid)||0;
-      c.totalDue+=(subtotal-discount-paid)*(1+taxPercent/100);
+      c.totalDue+=(subtotal-discount-paid)*(1+taxPercent);
     });
     Object.values(instCollObj).forEach(c=>{
       const cust=customersObj[c.customerCode];if(!cust)return;
@@ -1478,7 +1491,7 @@ $('doImport').addEventListener('click',async()=>{
       const discount=parseFloat(inv.discount)||0;
       const taxPercent=parseFloat(inv.taxPercent)||0;
       const paid=parseFloat(inv.paid)||0;
-      s.totalDue+=(subtotal-discount-paid)*(1+taxPercent/100);
+      s.totalDue+=(subtotal-discount-paid)*(1+taxPercent);
     });
     Object.values(instPayObj).forEach(p=>{
       const supp=suppliersObj[p.supplierCode];if(!supp)return;
