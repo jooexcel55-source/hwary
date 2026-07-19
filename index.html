@@ -650,6 +650,31 @@ function inRange(dateVal,fromStr,toStr){
 let uid='',uname='';
 window.RB={};
 
+/* ==================== طبقة الحفظ المحلي (كاش) ==================== */
+// بتحفظ آخر نسخة من كل مسار بيانات جالك من فايربيز، وتقدر تعرضها فورًا من الجهاز
+// من غير ما تستنى النت، وتفضل تحدثها في الخلفية كل ما نت يوصل بيانات جديدة.
+function lsGet(key,fallback){try{const v=localStorage.getItem('rb_cache_'+key);return v!==null?JSON.parse(v):fallback;}catch(e){return fallback;}}
+function lsSet(key,val){try{localStorage.setItem('rb_cache_'+key,JSON.stringify(val));}catch(e){}}
+function makeFakeSnapshot(val){
+  return{
+    val:()=>val,
+    exists:()=>val!==null&&val!==undefined,
+    forEach:(cb)=>{if(val&&typeof val==='object'){Object.keys(val).forEach(k=>cb({key:k,val:()=>val[k]}));}}
+  };
+}
+// بديل onValue: يعرض فورًا آخر نسخة محفوظة في الجهاز (لو موجودة) لحد ما بيانات النت توصل وتحدثها
+function cachedOnValue(path,handler){
+  const cached=lsGet(path,null);
+  if(cached!==null)handler(makeFakeSnapshot(cached));
+  onValue(ref(db,path),snap=>{lsSet(path,snap.val());handler(snap);},()=>{
+    const c=lsGet(path,null);if(c!==null)handler(makeFakeSnapshot(c));
+  });
+}
+// بديل get: بيرجع من النت ويحفظ نسخة، ولو النت فشل بيرجع آخر نسخة محفوظة في الجهاز
+function cachedGet(path){
+  return get(ref(db,path)).then(snap=>{lsSet(path,snap.val());return snap;}).catch(()=>makeFakeSnapshot(lsGet(path,null)));
+}
+
 let customersCache={},suppliersCache={},salesCache={},purchasesCache={},collectionsCache={},paymentsCache={};
 
 const RB_DATA_PATHS=[
@@ -816,7 +841,7 @@ function makeBrowser(cfg){
     });
   });
 
-  onValue(ref(db,cfg.dataRef),snap=>{
+  cachedOnValue(cfg.dataRef,snap=>{
     full=snap.val()?Object.values(snap.val()):[];
     if(cfg.sortFn)full.sort(cfg.sortFn);
     if(cfg.onData)cfg.onData(snap.val()||{});
@@ -927,7 +952,7 @@ makeBrowser({
       </div>`).join('');
   }
   $('itemQuickSearch').addEventListener('input',renderList);
-  onValue(ref(db,'rb_items'),snap=>{
+  cachedOnValue('rb_items',snap=>{
     full=snap.val()?Object.values(snap.val()):[];
     full.sort((a,b)=>(a.code||0)-(b.code||0));
     renderList();
@@ -1088,13 +1113,13 @@ makeBrowser({
 
 function refreshTreasuryBalance(){
   Promise.all([
-    get(ref(db,'rb_treasury_info')),
-    get(ref(db,'rb_cash_receipts')),
-    get(ref(db,'rb_cash_payments')),
-    get(ref(db,'rb_installment_collections')),
-    get(ref(db,'rb_installment_payments')),
-    get(ref(db,'rb_sales_invoices')),
-    get(ref(db,'rb_purchase_invoices'))
+    cachedGet('rb_treasury_info'),
+    cachedGet('rb_cash_receipts'),
+    cachedGet('rb_cash_payments'),
+    cachedGet('rb_installment_collections'),
+    cachedGet('rb_installment_payments'),
+    cachedGet('rb_sales_invoices'),
+    cachedGet('rb_purchase_invoices')
   ]).then(([tSnap,rSnap,pSnap,icSnap,ipSnap,siSnap,piSnap])=>{
     const opening=parseFloat((tSnap.val()||{}).openingBalance)||0;
     const cashIn=rSnap.exists()?Object.values(rSnap.val()).reduce((s,r)=>s+(parseFloat(r.amount)||0),0):0;
@@ -1127,13 +1152,13 @@ function refreshTreasuryBalance(){
     }
   });
 }
-onValue(ref(db,'rb_cash_receipts'),()=>refreshTreasuryBalance());
-onValue(ref(db,'rb_cash_payments'),()=>refreshTreasuryBalance());
-onValue(ref(db,'rb_treasury_info'),()=>refreshTreasuryBalance());
-onValue(ref(db,'rb_installment_collections'),()=>refreshTreasuryBalance());
-onValue(ref(db,'rb_installment_payments'),()=>refreshTreasuryBalance());
-onValue(ref(db,'rb_sales_invoices'),()=>refreshTreasuryBalance());
-onValue(ref(db,'rb_purchase_invoices'),()=>refreshTreasuryBalance());
+cachedOnValue('rb_cash_receipts',()=>refreshTreasuryBalance());
+cachedOnValue('rb_cash_payments',()=>refreshTreasuryBalance());
+cachedOnValue('rb_treasury_info',()=>refreshTreasuryBalance());
+cachedOnValue('rb_installment_collections',()=>refreshTreasuryBalance());
+cachedOnValue('rb_installment_payments',()=>refreshTreasuryBalance());
+cachedOnValue('rb_sales_invoices',()=>refreshTreasuryBalance());
+cachedOnValue('rb_purchase_invoices',()=>refreshTreasuryBalance());
 
 function setupStmtPicker(searchId,listId,hiddenId,cacheGetter){
   const searchInput=$(searchId),listEl=$(listId),hiddenInput=$(hiddenId);
@@ -1500,7 +1525,7 @@ $('doImport').addEventListener('click',async()=>{
 });
 
 function showCompanyInfo(){
-  get(ref(db,'rb_basic_info')).then(s=>{
+  cachedGet('rb_basic_info').then(s=>{
     if(!s.exists())return;
     const b=s.val();
     $('companyInfoCard').style.display='block';
@@ -1516,10 +1541,10 @@ function showCompanyInfo(){
 function refreshDashboard(){
   $('heroGreeting').textContent='أهلاً بيك يا '+(uname||'')+' 👋';
   $('accName').textContent=uname||'—';
-  get(ref(db,'rb_items')).then(s=>{$('statItems').textContent=s.exists()?Object.keys(s.val()).length:0;});
-  get(ref(db,'rb_sales_invoices')).then(s=>{$('statSales').textContent=s.exists()?Object.keys(s.val()).length:0;});
-  get(ref(db,'rb_purchase_invoices')).then(s=>{$('statPurch').textContent=s.exists()?Object.keys(s.val()).length:0;});
-  onValue(ref(db,'rb_sales_invoices'),snap=>{
+  cachedGet('rb_items').then(s=>{$('statItems').textContent=s.exists()?Object.keys(s.val()).length:0;});
+  cachedGet('rb_sales_invoices').then(s=>{$('statSales').textContent=s.exists()?Object.keys(s.val()).length:0;});
+  cachedGet('rb_purchase_invoices').then(s=>{$('statPurch').textContent=s.exists()?Object.keys(s.val()).length:0;});
+  cachedOnValue('rb_sales_invoices',snap=>{
     const box=$('recentActivity');
     if(!snap.exists()){box.innerHTML='<div class="empty-state"><div class="ei">🗂️</div><p>لا توجد بيانات بعد — حدّث البيانات من صفحة "حسابي"</p></div>';return;}
     const list=Object.values(snap.val()).sort((a,b)=>(b.invoiceNo||0)-(a.invoiceNo||0)).slice(0,5);
@@ -1564,7 +1589,7 @@ async function renderOfflineDebug(){
 
   let rows='';
   try{
-    const snaps=await Promise.all(RB_DATA_PATHS.map(p=>get(ref(db,p))));
+    const snaps=await Promise.all(RB_DATA_PATHS.map(p=>cachedGet(p)));
     rows=RB_DATA_PATHS.map((p,i)=>{
       const s=snaps[i];
       const label=labelMap[p]||p;
