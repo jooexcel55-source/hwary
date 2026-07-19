@@ -580,6 +580,11 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
       <div id="companyInfoBody"></div>
     </div>
     <div class="card">
+      <div class="stitle">🔧 حالة الحفظ المحلي (تشخيص)</div>
+      <div id="offlineDebugBody" style="font-size:12px;color:var(--ink);line-height:2;"></div>
+      <button class="mc-btn outline small" style="width:100%;margin-top:8px;" id="refreshDebugBtn">🔄 تحديث الحالة</button>
+    </div>
+    <div class="card">
       <div class="stitle">📥 تحديث البيانات</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.7;">
         صدّر ملف الإكسل من الأكسس (زرار التصدير) وارفعه هنا، وهيتحدّث كل حاجة في الموقع تلقائي.
@@ -665,7 +670,14 @@ window.RB={};
 
 /* ==================== طبقة العمل بدون نت ==================== */
 function lsGet(key,fallback){try{const v=localStorage.getItem('rb_data_'+key);return v!==null?JSON.parse(v):fallback;}catch(e){return fallback;}}
-function lsSet(key,val){try{localStorage.setItem('rb_data_'+key,JSON.stringify(val));}catch(e){}}
+function lsSet(key,val){try{localStorage.setItem('rb_data_'+key,JSON.stringify(val));markCacheWrite(key);}catch(e){}}
+function markCacheWrite(key){
+  try{
+    const meta=JSON.parse(localStorage.getItem('rb_cache_meta')||'{}');
+    meta[key]=Date.now();
+    localStorage.setItem('rb_cache_meta',JSON.stringify(meta));
+  }catch(e){}
+}
 
 // snapshot وهمي بنفس شكل Firebase (val/exists/forEach) عشان يشتغل مع باقي الكود بدون تغيير
 function makeFakeSnapshot(val){
@@ -688,6 +700,13 @@ function cachedOnValue(path,handler){
 // زي get() العادي، بس بيرجع آخر نسخة محفوظة لو النت مقطوع أو الطلب فشل
 function cachedGet(path){
   return get(ref(db,path)).then(snap=>{lsSet(path,snap.val());return snap;}).catch(()=>makeFakeSnapshot(lsGet(path,null)));
+}
+
+// اطلب من المتصفح إنه يحمي بيانات الموقع من المسح التلقائي وقت تنظيف الذاكرة
+if('storage' in navigator && 'persist' in navigator.storage){
+  navigator.storage.persist().then(granted=>{
+    try{localStorage.setItem('rb_persist_status',granted?'granted':'denied');}catch(e){}
+  }).catch(()=>{});
 }
 
 function updateNetBadge(){
@@ -1664,11 +1683,33 @@ function init(){
   uid=uid||localStorage.getItem('rb_uid')||'';
   uname=uname||localStorage.getItem('rb_name')||'';
   refreshDashboard();listenNotifs();refreshTreasuryBalance();showCompanyInfo();
+  renderOfflineDebug();
   setTimeout(requestNotifPermission,1500);
   if(navigator.onLine)tryFlushPendingImport();
 }
 
+function renderOfflineDebug(){
+  const box=$('offlineDebugBody');if(!box)return;
+  let storageWorks=false;
+  try{localStorage.setItem('rb_test_write','1');storageWorks=localStorage.getItem('rb_test_write')==='1';localStorage.removeItem('rb_test_write');}catch(e){storageWorks=false;}
 
+  let meta={};
+  try{meta=JSON.parse(localStorage.getItem('rb_cache_meta')||'{}');}catch(e){}
+
+  const persistStatus=localStorage.getItem('rb_persist_status')||'—';
+  const rows=RB_DATA_PATHS.map(p=>{
+    const ts=meta[p];
+    const label={rb_customers:'العملاء',rb_suppliers:'الموردين',rb_items:'الأصناف',rb_sales_invoices:'فواتير البيع',rb_purchase_invoices:'فواتير الشراء',rb_warehouses:'المخازن',rb_treasury_info:'الخزينة',rb_cash_receipts:'إذون الاستلام',rb_cash_payments:'إذون الصرف',rb_installment_collections:'تحصيل الأقساط',rb_installment_payments:'سداد الأقساط',rb_transfer_vouchers:'التحويلات',rb_basic_info:'بيانات المنشأة'}[p]||p;
+    return `<div class="bfield"><span class="bl">${label}</span><span class="bv">${ts?fmtDate(new Date(ts))+' '+new Date(ts).toLocaleTimeString('ar-EG'):'❌ لسه ما اتحفظش'}</span></div>`;
+  }).join('');
+
+  box.innerHTML=`
+    <div class="bfield"><span class="bl">الحفظ المحلي شغال؟</span><span class="bv">${storageWorks?'✅ أيوة':'❌ لأ (مشكلة في المتصفح)'}</span></div>
+    <div class="bfield"><span class="bl">حماية التخزين من المسح</span><span class="bv">${persistStatus==='granted'?'✅ محمي':persistStatus==='denied'?'⚠️ مش محمي':'— لسه معروفتش'}</span></div>
+    <div class="bfield"><span class="bl">حالة الاتصال دلوقتي</span><span class="bv">${navigator.onLine?'🟢 أونلاين':'🔴 أوفلاين'}</span></div>
+    ${rows}`;
+}
+$('refreshDebugBtn').addEventListener('click',()=>{renderOfflineDebug();toast('🔄 اتحدثت الحالة');});
 
 (function start(){
   const localUid=localStorage.getItem('rb_uid');const localName=localStorage.getItem('rb_name');
