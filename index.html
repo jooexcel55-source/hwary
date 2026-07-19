@@ -1545,14 +1545,46 @@ $('wipeDataBtn').addEventListener('click',async()=>{
   }
 });
 
-/* ===== حالة تشخيص الحفظ المحلي ===== */
-function renderOfflineDebug(){
+/* ===== حالة تشخيص الحفظ المحلي وحالة كل نوع بيانات ===== */
+async function renderOfflineDebug(){
   const box=$('offlineDebugBody');if(!box)return;
+  box.innerHTML='<div style="color:var(--muted);">⏳ جاري فحص الحالة...</div>';
+
   let storageWorks=false;
   try{localStorage.setItem('rb_test_write','1');storageWorks=localStorage.getItem('rb_test_write')==='1';localStorage.removeItem('rb_test_write');}catch(e){storageWorks=false;}
+
+  const labelMap={
+    rb_customers:'👥 العملاء',rb_suppliers:'🚚 الموردين',rb_items:'📦 الأصناف',
+    rb_sales_invoices:'🧾 فواتير البيع',rb_purchase_invoices:'🧾 فواتير الشراء',
+    rb_warehouses:'🏬 المخازن',rb_treasury_info:'💰 بيانات الخزينة',
+    rb_cash_receipts:'📥 إذون الاستلام',rb_cash_payments:'📤 إذون الصرف',
+    rb_installment_collections:'💳 تحصيل الأقساط',rb_installment_payments:'💳 سداد الأقساط',
+    rb_transfer_vouchers:'🔁 التحويلات المخزنية',rb_basic_info:'🏢 بيانات المنشأة'
+  };
+
+  let rows='';
+  try{
+    const snaps=await Promise.all(RB_DATA_PATHS.map(p=>get(ref(db,p))));
+    rows=RB_DATA_PATHS.map((p,i)=>{
+      const s=snaps[i];
+      const label=labelMap[p]||p;
+      if(!s.exists()){
+        return `<div class="bfield"><span class="bl">${label}</span><span class="bv" style="color:var(--danger);">❌ لسه فاضي</span></div>`;
+      }
+      const val=s.val();
+      const count=(p==='rb_treasury_info'||p==='rb_basic_info')?null:Object.keys(val||{}).length;
+      const info=count===null?'✅ متوفر':`✅ اتحدث (${count} سجل)`;
+      return `<div class="bfield"><span class="bl">${label}</span><span class="bv" style="color:var(--success);">${info}</span></div>`;
+    }).join('');
+  }catch(e){
+    console.error(e);
+    rows='<div style="color:var(--danger);">❌ حصل خطأ أثناء جلب الحالة، تأكد إنك متصل بالنت</div>';
+  }
+
   box.innerHTML=`
     <div class="bfield"><span class="bl">الحفظ المحلي شغال؟</span><span class="bv">${storageWorks?'✅ أيوة':'❌ لأ (مشكلة في المتصفح)'}</span></div>
-    <div class="bfield"><span class="bl">حالة الاتصال دلوقتي</span><span class="bv">${navigator.onLine?'🟢 أونلاين':'🔴 أوفلاين'}</span></div>`;
+    <div class="bfield"><span class="bl">حالة الاتصال دلوقتي</span><span class="bv">${navigator.onLine?'🟢 أونلاين':'🔴 أوفلاين'}</span></div>
+    ${rows}`;
 }
 $('refreshDebugBtn').addEventListener('click',()=>{renderOfflineDebug();toast('🔄 اتحدثت الحالة');});
 
