@@ -1668,11 +1668,7 @@ function init(){
   if(navigator.onLine)tryFlushPendingImport();
 }
 
-if('storage' in navigator && 'persist' in navigator.storage){
-  navigator.storage.persist().then(granted=>{
-    console.log('persistent storage:', granted?'granted':'not granted');
-  });
-}
+
 
 (function start(){
   const localUid=localStorage.getItem('rb_uid');const localName=localStorage.getItem('rb_name');
