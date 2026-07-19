@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -103,11 +104,13 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
 .empty-state{text-align:center;padding:38px 20px;color:var(--muted);}
 .empty-state .ei{font-size:36px;margin-bottom:9px;opacity:.75;}
 
+/* ===== تبديل نوع العرض (كروت / جدول) ===== */
 .view-toggle{display:flex;gap:6px;margin-bottom:10px;}
 .vt-btn{flex:1;padding:8px 6px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;border-radius:10px;cursor:pointer;transition:all .18s ease;}
 .vt-btn:hover{border-color:var(--primary-lt);}
 .vt-btn.active{border-color:transparent;background:linear-gradient(135deg,var(--primary-lt),var(--primary-dk));color:#fff;box-shadow:0 4px 12px rgba(61,34,102,.25);}
 
+/* ===== جدول زي الإكسل ===== */
 .grid-wrap{overflow-x:auto;border:1.5px solid var(--border);border-radius:13px;background:var(--surface);max-height:65vh;overflow-y:auto;box-shadow:0 3px 12px rgba(61,34,102,.05);}
 .excel-table{width:100%;border-collapse:collapse;font-size:11.5px;white-space:nowrap;}
 .excel-table th{background:linear-gradient(135deg,var(--primary-dk),#2a1650);color:#fff;padding:9px 10px;position:sticky;top:0;font-weight:900;border:1px solid rgba(255,255,255,.12);text-align:center;z-index:2;}
@@ -115,11 +118,13 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
 .excel-table tr:nth-child(even) td{background:var(--surface2);}
 .excel-table tr:hover td{background:#f0e7fb;}
 
+/* ===== متصفح الكروت (تكويد/فواتير) ===== */
 .browser-search{position:relative;margin-bottom:10px;}
 .browser-search .mc-input{padding-left:36px;margin-bottom:0;}
 .browser-search .si{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);}
 .browser-counter{text-align:center;font-size:11px;color:var(--muted);margin-bottom:10px;font-weight:700;}
 
+/* ===== ليست بوكس الأصناف ===== */
 .listbox{background:var(--surface);border:1.5px solid var(--border);border-radius:15px;max-height:62vh;overflow-y:auto;box-shadow:0 3px 12px rgba(61,34,102,.05);}
 .list-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border);transition:background .15s ease;}
 .list-row:last-child{border-bottom:none;}
@@ -230,6 +235,7 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
 
 <div class="wrap">
 
+  <!-- ===== الرئيسية ===== -->
   <div id="pg_home" class="page active">
     <div class="hero">
       <div class="hero-title" id="heroGreeting">أهلاً بيك 👋</div>
@@ -253,6 +259,7 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
     <div id="recentActivity"><div class="empty-state"><div class="ei">🗂️</div><p>لا توجد بيانات بعد — حدّث البيانات من صفحة "حسابي"</p></div></div>
   </div>
 
+  <!-- ===== التكويد ===== -->
   <div id="pg_coding" class="page">
     <div class="subnav">
       <button class="subtab active" data-sub="cust">👥 العملاء</button>
@@ -338,6 +345,7 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
     </div>
   </div>
 
+  <!-- ===== الفواتير ===== -->
   <div id="pg_invoices" class="page">
     <div class="subnav">
       <button class="subtab active" data-sub="sale">🧾 فاتورة بيع</button>
@@ -403,6 +411,7 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
     </div>
   </div>
 
+  <!-- ===== الخزينة ===== -->
   <div id="pg_treasury" class="page">
     <div class="treasury-hero">
       <div class="th-lbl">💰 رصيد الخزينة الحالي</div>
@@ -496,6 +505,7 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
     </div>
   </div>
 
+  <!-- ===== كشف حساب (استعلام بين تاريخين) ===== -->
   <div id="pg_reports" class="page">
     <div class="subnav">
       <button class="subtab active" data-sub="custStmt">👥 كشف حساب عميل</button>
@@ -549,6 +559,7 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
     </div>
   </div>
 
+  <!-- ===== بحث الأصناف ===== -->
   <div id="pg_itemsearch" class="page">
     <div class="stitle">🔍 بحث سريع في الأصناف</div>
     <div class="browser-search"><input class="mc-input" id="itemQuickSearch" placeholder="اكتب اسم الصنف للفلترة..."><span class="si">🔍</span></div>
@@ -556,6 +567,7 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
     <div class="listbox" id="itemQuickListBox"></div>
   </div>
 
+  <!-- ===== الحساب ===== -->
   <div id="pg_account" class="page">
     <div class="card">
       <div style="font-size:13px;font-weight:900;color:var(--primary-dk);margin-bottom:2px;" id="accName">—</div>
@@ -566,23 +578,11 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
       <div id="companyInfoBody"></div>
     </div>
     <div class="card">
-      <div class="stitle">🔧 حالة الحفظ المحلي (تشخيص)</div>
-      <div id="offlineDebugBody" style="font-size:12px;color:var(--ink);line-height:2;"></div>
-      <button class="mc-btn outline small" style="width:100%;margin-top:8px;" id="refreshDebugBtn">🔄 تحديث الحالة</button>
-    </div>
-    <div class="card">
       <div class="stitle">📥 تحديث البيانات</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.7;">
         صدّر ملف الإكسل من الأكسس (زرار التصدير) وارفعه هنا، وهيتحدّث كل حاجة في الموقع تلقائي.
       </div>
       <button class="mc-btn gold" style="width:100%;" onclick="document.getElementById('mImport').classList.add('open')">📥 استيراد ملف البيانات</button>
-    </div>
-    <div class="card" style="border-color:var(--danger);">
-      <div class="stitle" style="color:var(--danger);">🗑️ مسح كل البيانات</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.7;">
-        هيمسح كل العملاء والموردين والأصناف والفواتير والخزينة والأذون نهائيًا من قاعدة البيانات، ويرجّع الموقع بدون بيانات. الحسابات وتسجيلات الدخول مش هتتأثر. محتاج نت عشان يشتغل.
-      </div>
-      <button class="mc-btn danger" style="width:100%;" id="wipeDataBtn">🗑️ مسح كل البيانات</button>
     </div>
     <div class="card" style="border-color:var(--danger);">
       <button class="mc-btn danger" style="width:100%;" onclick="RB.logout()">🚪 تسجيل الخروج</button>
@@ -591,6 +591,7 @@ select.mc-input{-webkit-appearance:none;appearance:none;background-image:url("da
 
 </div>
 
+<!-- ===== مودال الاستيراد ===== -->
 <div class="moverlay" id="mImport">
   <div class="modal">
     <button class="mclose" onclick="document.getElementById('mImport').classList.remove('open')">×</button>
@@ -628,9 +629,12 @@ function parseAnyDate(v){
   if(typeof v==='string'){
     const s=v.trim();
     if(!s)return null;
+    // رقم تسلسلي إكسل مكتوب كنص
     if(/^\d+(\.\d+)?$/.test(s))return excelSerialToDate(parseFloat(s));
+    // yyyy-mm-dd أو yyyy/mm/dd
     let m=s.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
     if(m){const d=new Date(+m[1],+m[2]-1,+m[3]);if(!isNaN(d))return d;}
+    // dd/mm/yyyy أو dd-mm-yyyy
     m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
     if(m){const d=new Date(+m[3],+m[2]-1,+m[1]);if(!isNaN(d))return d;}
     const d=new Date(s);
@@ -641,7 +645,7 @@ function parseAnyDate(v){
 function fmtDate(v){const d=parseAnyDate(v);if(!d)return'—';return d.toLocaleDateString('ar-EG');}
 function inRange(dateVal,fromStr,toStr){
   const d=parseAnyDate(dateVal);
-  if(!d)return true;
+  if(!d)return true;   // التاريخ الفاضي/الغلط يفضل موجود، زي ما بيحصل في حساب الكرت
   if(fromStr){const f=new Date(fromStr);if(d<f)return false;}
   if(toStr){const t=new Date(toStr);t.setHours(23,59,59,999);if(d>t)return false;}
   return true;
@@ -650,39 +654,10 @@ function inRange(dateVal,fromStr,toStr){
 let uid='',uname='';
 window.RB={};
 
-/* ==================== طبقة الحفظ المحلي (كاش) ==================== */
-// بتحفظ آخر نسخة من كل مسار بيانات جالك من فايربيز، وتقدر تعرضها فورًا من الجهاز
-// من غير ما تستنى النت، وتفضل تحدثها في الخلفية كل ما نت يوصل بيانات جديدة.
-function lsGet(key,fallback){try{const v=localStorage.getItem('rb_cache_'+key);return v!==null?JSON.parse(v):fallback;}catch(e){return fallback;}}
-function lsSet(key,val){try{localStorage.setItem('rb_cache_'+key,JSON.stringify(val));}catch(e){}}
-function makeFakeSnapshot(val){
-  return{
-    val:()=>val,
-    exists:()=>val!==null&&val!==undefined,
-    forEach:(cb)=>{if(val&&typeof val==='object'){Object.keys(val).forEach(k=>cb({key:k,val:()=>val[k]}));}}
-  };
-}
-// بديل onValue: يعرض فورًا آخر نسخة محفوظة في الجهاز (لو موجودة) لحد ما بيانات النت توصل وتحدثها
-function cachedOnValue(path,handler){
-  const cached=lsGet(path,null);
-  if(cached!==null)handler(makeFakeSnapshot(cached));
-  onValue(ref(db,path),snap=>{lsSet(path,snap.val());handler(snap);},()=>{
-    const c=lsGet(path,null);if(c!==null)handler(makeFakeSnapshot(c));
-  });
-}
-// بديل get: بيرجع من النت ويحفظ نسخة، ولو النت فشل بيرجع آخر نسخة محفوظة في الجهاز
-function cachedGet(path){
-  return get(ref(db,path)).then(snap=>{lsSet(path,snap.val());return snap;}).catch(()=>makeFakeSnapshot(lsGet(path,null)));
-}
-
+/* ===== كاش بيانات محلي لاستخدامه في كشوف الحساب ===== */
 let customersCache={},suppliersCache={},salesCache={},purchasesCache={},collectionsCache={},paymentsCache={};
 
-const RB_DATA_PATHS=[
-  'rb_customers','rb_suppliers','rb_items','rb_sales_invoices','rb_purchase_invoices',
-  'rb_warehouses','rb_treasury_info','rb_cash_receipts','rb_cash_payments',
-  'rb_installment_collections','rb_installment_payments','rb_transfer_vouchers','rb_basic_info'
-];
-
+/* ===== تنقل الصفحات الرئيسية ===== */
 function goPage(pg){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const el=$('pg_'+pg);if(el)el.classList.add('active');
@@ -692,6 +667,7 @@ function goPage(pg){
 document.querySelectorAll('.tni').forEach(btn=>btn.addEventListener('click',()=>goPage(btn.dataset.pg)));
 document.querySelectorAll('.quick-btn').forEach(btn=>btn.addEventListener('click',()=>goPage(btn.dataset.goto)));
 
+/* ===== تنقل التبويبات الفرعية ===== */
 document.querySelectorAll('.subnav').forEach(nav=>{
   nav.addEventListener('click',e=>{
     const btn=e.target.closest('.subtab');if(!btn)return;
@@ -701,6 +677,7 @@ document.querySelectorAll('.subnav').forEach(nav=>{
   });
 });
 
+/* ===== تسجيل الدخول ===== */
 $('sLoginBtn').addEventListener('click',()=>{const ls=$('loginSection');ls.style.display=ls.style.display==='none'?'block':'none';});
 $('sNext1').addEventListener('click',async()=>{
   const nm=$('sName').value.trim(),code=$('sPersonalCode').value.trim();
@@ -727,6 +704,7 @@ $('doLogin').addEventListener('click',async()=>{
 });
 RB.logout=function(){if(!confirm('هتخرج من حسابك؟'))return;localStorage.removeItem('rb_uid');localStorage.removeItem('rb_name');location.reload();};
 
+/* ===== الإشعارات (FCM) ===== */
 const VAPID_KEY='BHaZjTgg0msb-9c9AkM_LpRjS7HGmOiGoWTrCkeCp-OpQeJuopra0biYeHDrRUQrUB5bEVjZTQTMnNrqvrEDIe0';
 const NOTIF_SERVER='https://gw-notif-server-production.up.railway.app';
 function pushNotif(tUid,icon,text,linkObj){
@@ -785,7 +763,9 @@ function listenNotifs(){
   });
 }
 
+/* ===================== محرّك متصفح عام: كروت + جدول إكسل ===================== */
 function makeBrowser(cfg){
+  // cfg: {prefix, dataRef, renderCard, matchFn, sortFn, onData, columns}
   let full=[],filtered=[],idx=0,view='card';
 
   function renderCard(dir){
@@ -841,7 +821,7 @@ function makeBrowser(cfg){
     });
   });
 
-  cachedOnValue(cfg.dataRef,snap=>{
+  onValue(ref(db,cfg.dataRef),snap=>{
     full=snap.val()?Object.values(snap.val()):[];
     if(cfg.sortFn)full.sort(cfg.sortFn);
     if(cfg.onData)cfg.onData(snap.val()||{});
@@ -850,6 +830,7 @@ function makeBrowser(cfg){
   return {refresh:applySearch};
 }
 
+/* ---- كرت العميل ---- */
 makeBrowser({
   prefix:'cust',dataRef:'rb_customers',
   matchFn:(c,q)=>(c.name||'').toLowerCase().includes(q)||String(c.code||'').includes(q)||(c.phone||'').includes(q),
@@ -869,6 +850,7 @@ makeBrowser({
     `
 });
 
+/* ---- كرت المورد ---- */
 makeBrowser({
   prefix:'supp',dataRef:'rb_suppliers',
   matchFn:(c,q)=>(c.name||'').toLowerCase().includes(q)||String(c.code||'').includes(q)||(c.phone||'').includes(q),
@@ -888,6 +870,7 @@ makeBrowser({
     `
 });
 
+/* ---- كرت الصنف ---- */
 makeBrowser({
   prefix:'item',dataRef:'rb_items',
   matchFn:(c,q)=>(c.name||'').toLowerCase().includes(q)||String(c.code||'').includes(q)||(c.category||'').toLowerCase().includes(q)||(c.itemNo||'').toLowerCase().includes(q),
@@ -913,6 +896,7 @@ makeBrowser({
   }
 });
 
+/* ---- كرت المخزن ---- */
 makeBrowser({
   prefix:'wh',dataRef:'rb_warehouses',
   matchFn:(c,q)=>(c.name||'').toLowerCase().includes(q)||String(c.code||'').includes(q)||(c.location||'').toLowerCase().includes(q),
@@ -931,6 +915,7 @@ makeBrowser({
     <div class="bfield"><span class="bl">📧 البريد الإلكتروني</span><span class="bv">${safeA(c.email)||'—'}</span></div>`
 });
 
+/* ---- شاشة بحث الأصناف المستقلة (ليست بوكس لايف بالاسم/الكود/التصنيف) ---- */
 (function(){
   let full=[];
   function renderList(){
@@ -952,13 +937,14 @@ makeBrowser({
       </div>`).join('');
   }
   $('itemQuickSearch').addEventListener('input',renderList);
-  cachedOnValue('rb_items',snap=>{
+  onValue(ref(db,'rb_items'),snap=>{
     full=snap.val()?Object.values(snap.val()):[];
     full.sort((a,b)=>(a.code||0)-(b.code||0));
     renderList();
   });
 })();
 
+/* ---- كرت فاتورة البيع ---- */
 makeBrowser({
   prefix:'sale',dataRef:'rb_sales_invoices',
   matchFn:(inv,q)=>String(inv.invoiceNo||'').includes(q)||(inv.customerName||'').toLowerCase().includes(q),
@@ -988,6 +974,7 @@ makeBrowser({
   }
 });
 
+/* ---- كرت فاتورة الشراء ---- */
 makeBrowser({
   prefix:'purch',dataRef:'rb_purchase_invoices',
   matchFn:(inv,q)=>String(inv.invoiceNo||'').includes(q)||(inv.supplierName||'').toLowerCase().includes(q),
@@ -1017,6 +1004,7 @@ makeBrowser({
   }
 });
 
+/* ---- كرت إذن التحويل المخزني ---- */
 makeBrowser({
   prefix:'transfer',dataRef:'rb_transfer_vouchers',
   matchFn:(v,q)=>String(v.voucherNo||'').includes(q),
@@ -1039,6 +1027,7 @@ makeBrowser({
   }
 });
 
+/* ---- كرت اذن استلام نقدية ---- */
 makeBrowser({
   prefix:'recv',dataRef:'rb_cash_receipts',
   matchFn:(r,q)=>String(r.no||'').includes(q)||(r.from||'').toLowerCase().includes(q),
@@ -1056,6 +1045,7 @@ makeBrowser({
     ${r.notes?`<div class="bfield"><span class="bl">🗒️ ملاحظات</span><span class="bv">${safeA(r.notes)}</span></div>`:''}`
 });
 
+/* ---- كرت اذن صرف نقدية ---- */
 makeBrowser({
   prefix:'pay',dataRef:'rb_cash_payments',
   matchFn:(r,q)=>String(r.no||'').includes(q)||(r.to||'').toLowerCase().includes(q),
@@ -1075,6 +1065,7 @@ makeBrowser({
     ${r.notes?`<div class="bfield"><span class="bl">🗒️ ملاحظات</span><span class="bv">${safeA(r.notes)}</span></div>`:''}`
 });
 
+/* ---- كرت اذن تحصيل اقساط ---- */
 makeBrowser({
   prefix:'instColl',dataRef:'rb_installment_collections',
   matchFn:(r,q)=>String(r.no||'').includes(q)||(r.customerName||'').toLowerCase().includes(q),
@@ -1093,6 +1084,7 @@ makeBrowser({
     ${r.notes?`<div class="bfield"><span class="bl">🗒️ ملاحظات</span><span class="bv">${safeA(r.notes)}</span></div>`:''}`
 });
 
+/* ---- كرت اذن سداد اقساط ---- */
 makeBrowser({
   prefix:'instPay',dataRef:'rb_installment_payments',
   matchFn:(r,q)=>String(r.no||'').includes(q)||(r.supplierName||'').toLowerCase().includes(q),
@@ -1111,22 +1103,25 @@ makeBrowser({
     ${r.notes?`<div class="bfield"><span class="bl">🗒️ ملاحظات</span><span class="bv">${safeA(r.notes)}</span></div>`:''}`
 });
 
+/* ===== رصيد الخزينة الإجمالي (بنفس معادلة برنامج الأكسس) ===== */
 function refreshTreasuryBalance(){
   Promise.all([
-    cachedGet('rb_treasury_info'),
-    cachedGet('rb_cash_receipts'),
-    cachedGet('rb_cash_payments'),
-    cachedGet('rb_installment_collections'),
-    cachedGet('rb_installment_payments'),
-    cachedGet('rb_sales_invoices'),
-    cachedGet('rb_purchase_invoices')
+    get(ref(db,'rb_treasury_info')),
+    get(ref(db,'rb_cash_receipts')),
+    get(ref(db,'rb_cash_payments')),
+    get(ref(db,'rb_installment_collections')),
+    get(ref(db,'rb_installment_payments')),
+    get(ref(db,'rb_sales_invoices')),
+    get(ref(db,'rb_purchase_invoices'))
   ]).then(([tSnap,rSnap,pSnap,icSnap,ipSnap,siSnap,piSnap])=>{
     const opening=parseFloat((tSnap.val()||{}).openingBalance)||0;
     const cashIn=rSnap.exists()?Object.values(rSnap.val()).reduce((s,r)=>s+(parseFloat(r.amount)||0),0):0;
     const cashOut=pSnap.exists()?Object.values(pSnap.val()).reduce((s,r)=>s+(parseFloat(r.amount)||0),0):0;
     const instCollIn=icSnap.exists()?Object.values(icSnap.val()).reduce((s,r)=>s+(parseFloat(r.amount)||0),0):0;
     const instPayOut=ipSnap.exists()?Object.values(ipSnap.val()).reduce((s,r)=>s+(parseFloat(r.amount)||0),0):0;
+    // تحصيلات المبيعات = المبلغ المدفوع فعليًا وقت البيع (مش إجمالي الفاتورة)
     const salesPaidIn=siSnap.exists()?Object.values(siSnap.val()).reduce((s,inv)=>s+(parseFloat(inv.paid)||0),0):0;
+    // مصروفات المشتروات = المبلغ المدفوع فعليًا وقت الشراء
     const purchPaidOut=piSnap.exists()?Object.values(piSnap.val()).reduce((s,inv)=>s+(parseFloat(inv.paid)||0),0):0;
 
     const totalIn=cashIn+instCollIn+salesPaidIn;
@@ -1152,14 +1147,15 @@ function refreshTreasuryBalance(){
     }
   });
 }
-cachedOnValue('rb_cash_receipts',()=>refreshTreasuryBalance());
-cachedOnValue('rb_cash_payments',()=>refreshTreasuryBalance());
-cachedOnValue('rb_treasury_info',()=>refreshTreasuryBalance());
-cachedOnValue('rb_installment_collections',()=>refreshTreasuryBalance());
-cachedOnValue('rb_installment_payments',()=>refreshTreasuryBalance());
-cachedOnValue('rb_sales_invoices',()=>refreshTreasuryBalance());
-cachedOnValue('rb_purchase_invoices',()=>refreshTreasuryBalance());
+onValue(ref(db,'rb_cash_receipts'),()=>refreshTreasuryBalance());
+onValue(ref(db,'rb_cash_payments'),()=>refreshTreasuryBalance());
+onValue(ref(db,'rb_treasury_info'),()=>refreshTreasuryBalance());
+onValue(ref(db,'rb_installment_collections'),()=>refreshTreasuryBalance());
+onValue(ref(db,'rb_installment_payments'),()=>refreshTreasuryBalance());
+onValue(ref(db,'rb_sales_invoices'),()=>refreshTreasuryBalance());
+onValue(ref(db,'rb_purchase_invoices'),()=>refreshTreasuryBalance());
 
+/* ===== كشوف الحساب بين تاريخين ===== */
 function setupStmtPicker(searchId,listId,hiddenId,cacheGetter){
   const searchInput=$(searchId),listEl=$(listId),hiddenInput=$(hiddenId);
   function renderList(q){
@@ -1201,6 +1197,7 @@ function buildCustomerStatement(){
     const discount=parseFloat(inv.discount)||0;
     const taxPercent=parseFloat(inv.taxPercent)||0;
     const paid=parseFloat(inv.paid)||0;
+    // نفس معادلة الأكسس: (الإجمالي - الخصم) + الضريبة - المدفوع
     const invoiceRemaining=(subtotal-discount-paid)*(1+taxPercent);
     totalRemaining+=invoiceRemaining;
   });
@@ -1234,6 +1231,7 @@ function buildSupplierStatement(){
     const discount=parseFloat(inv.discount)||0;
     const taxPercent=parseFloat(inv.taxPercent)||0;
     const paid=parseFloat(inv.paid)||0;
+    // نفس معادلة الأكسس: (الإجمالي - الخصم) + الضريبة - المدفوع
     const invoiceRemaining=(subtotal-discount-paid)*(1+taxPercent);
     totalRemaining+=invoiceRemaining;
   });
@@ -1252,6 +1250,7 @@ function buildSupplierStatement(){
 }
 $('suppStmtBtn').addEventListener('click',buildSupplierStatement);
 
+/* ===================== الاستيراد من ملف الإكسل ===================== */
 function pick(row,...keys){for(const k of keys){if(row[k]!==undefined&&row[k]!=='')return row[k];}return '';}
 function pickDate(row,...keys){
   const v=pick(row,...keys);
@@ -1263,6 +1262,7 @@ function findSheet(wb,aliases){
   for(const name of wb.SheetNames){
     if(aliases.some(a=>norm(name)===norm(a))){
       const raw=XLSX.utils.sheet_to_json(wb.Sheets[name],{defval:''});
+      // تنظيف أسماء الأعمدة من مسافات زيادة عشان الـ pick() ميفوتش القيمة
       return raw.map(row=>{
         const clean={};
         Object.keys(row).forEach(k=>{clean[k.replace(/\s+/g,' ').trim()]=row[k];});
@@ -1325,6 +1325,7 @@ $('doImport').addEventListener('click',async()=>{
 
     statusEl.textContent='⏳ جاري تجهيز الفواتير...';
 
+    // فواتير البيع
     const salesObj={};
     saleInvRows.forEach(r=>{
       const no=pick(r,'رقم الفاتورة');if(no==='')return;
@@ -1350,6 +1351,7 @@ $('doImport').addEventListener('click',async()=>{
       });
     });
 
+    // فواتير الشراء
     const purchObj={};
     purchInvRows.forEach(r=>{
       const no=pick(r,'رقم الفاتورة');if(no==='')return;
@@ -1375,6 +1377,8 @@ $('doImport').addEventListener('click',async()=>{
       });
     });
 
+    // حساب الكمية الحالية لكل صنف = رصيد أول المدة + المشتريات - المبيعات
+    // ملحوظة: أعمدة "صافي الكمية" و"القيمة" في الأكسس فاضية دايمًا، فبنحسب صافي الكمية بنفسنا = الكمية المباعة/المشتراة - كمية المرتجع
     const qtyMap={};
     openingStockRows.forEach(r=>{
       const itemCode=pick(r,'اسم الصنف','أسم الصنف');if(itemCode==='')return;
@@ -1396,24 +1400,28 @@ $('doImport').addEventListener('click',async()=>{
 
     statusEl.textContent='⏳ جاري تجهيز الخزينة والأقساط والتحويلات...';
 
+    // الخزينة (رصيد أول الفترة)
     let treasuryInfo={openingBalance:0,date:'',notes:''};
     if(treasuryRows.length){
       const t=treasuryRows[0];
       treasuryInfo={openingBalance:pick(t,'رصيد اول الفترة')||0,date:pickDate(t,'التاريخ'),notes:pick(t,'ملاحظات')};
     }
 
+    // اذن استلام نقدية
     const cashReceiptsObj={};
     cashRecvRows.forEach(r=>{
       const no=pick(r,'رقم الاذن');if(no==='')return;
       cashReceiptsObj[no]={no,date:pickDate(r,'تاريخ الاستلام','تاريخ الانشاء'),from:pick(r,'مستلم من'),amount:pick(r,'قيمة المستلم')||0,desc:pick(r,'بيان الاستلام'),notes:pick(r,'ملاحظات')};
     });
 
+    // اذن صرف نقدية
     const cashPaymentsObj={};
     cashPayRows.forEach(r=>{
       const no=pick(r,'رقم الاذن');if(no==='')return;
       cashPaymentsObj[no]={no,date:pickDate(r,'تاريخ الصرف','تاريخ الانشاء'),to:pick(r,'منصرف الي'),amount:pick(r,'قيمة المنصرف')||0,desc:pick(r,'بيان الصرف'),receivedBy:pick(r,'المستلم'),voucherType:pick(r,'سند الصرف'),voucherNo:pick(r,'رقم سند الصرف'),notes:pick(r,'ملاحظات')};
     });
 
+    // اذن تحصيل اقساط (من العملاء)
     const instCollObj={};
     instCollRows.forEach(r=>{
       const no=pick(r,'رقم الاذن');if(no==='')return;
@@ -1421,6 +1429,7 @@ $('doImport').addEventListener('click',async()=>{
       instCollObj[no]={no,date:pickDate(r,'تاريخ التحصيل','تاريخ الانشاء'),customerCode:custCode,customerName:(customersObj[custCode]&&customersObj[custCode].name)||('عميل '+custCode),amount:pick(r,'قيمة التحصيل')||0,desc:pick(r,'بيان التحصيل'),notes:pick(r,'ملاحظات')};
     });
 
+    // اذن سداد اقساط (للموردين)
     const instPayObj={};
     instPayRows.forEach(r=>{
       const no=pick(r,'رقم الاذن');if(no==='')return;
@@ -1428,6 +1437,7 @@ $('doImport').addEventListener('click',async()=>{
       instPayObj[no]={no,date:pickDate(r,'تاريخ السداد','تاريخ الانشاء'),supplierCode:suppCode,supplierName:(suppliersObj[suppCode]&&suppliersObj[suppCode].name)||('مورد '+suppCode),amount:pick(r,'قيمة المسدد')||0,desc:pick(r,'بيان السداد'),notes:pick(r,'ملاحظات')};
     });
 
+    // اذن تحويل مخزني + حركاته
     const transferObj={};
     transferVoucherRows.forEach(r=>{
       const no=pick(r,'رقم الاذن');if(no==='')return;
@@ -1448,6 +1458,7 @@ $('doImport').addEventListener('click',async()=>{
       });
     });
 
+    // بيانات أساسية (بيانات المنشأة)
     let basicInfo=null;
     if(basicInfoRows.length){
       const b=basicInfoRows[0];
@@ -1458,6 +1469,7 @@ $('doImport').addEventListener('click',async()=>{
       };
     }
 
+    // إجمالي المستحق لكل عميل (كل فواتيره - كل تحصيلاته، على مدار كل الفترة)
     Object.keys(customersObj).forEach(code=>{customersObj[code].totalDue=parseFloat(customersObj[code].openBalance)||0;});
     Object.values(salesObj).forEach(inv=>{
       const c=customersObj[inv.customerCode];if(!c)return;
@@ -1472,6 +1484,7 @@ $('doImport').addEventListener('click',async()=>{
       cust.totalDue-=(parseFloat(c.amount)||0);
     });
 
+    // إجمالي المستحق لكل مورد (كل فواتيره - كل سداداته، على مدار كل الفترة)
     Object.keys(suppliersObj).forEach(code=>{suppliersObj[code].totalDue=parseFloat(suppliersObj[code].openBalance)||0;});
     Object.values(purchObj).forEach(inv=>{
       const s=suppliersObj[inv.supplierCode];if(!s)return;
@@ -1509,6 +1522,7 @@ $('doImport').addEventListener('click',async()=>{
     await set(ref(db,'rb_transfer_vouchers'),transferObj);
     if(basicInfo)await set(ref(db,'rb_basic_info'),basicInfo);
 
+    // إشعار كل المستخدمين الآخرين إن فيه نسخة بيانات جديدة اتحطت
     const usersSnap=await get(ref(db,'rb_users'));
     usersSnap.forEach(s=>{
       pushNotif(s.key,'📥',(uname||'حد')+' حط نسخة بيانات جديدة على النظام',{type:'account'});
@@ -1524,8 +1538,9 @@ $('doImport').addEventListener('click',async()=>{
   }
 });
 
+/* ===== عرض بيانات المنشأة في صفحة حسابي ===== */
 function showCompanyInfo(){
-  cachedGet('rb_basic_info').then(s=>{
+  get(ref(db,'rb_basic_info')).then(s=>{
     if(!s.exists())return;
     const b=s.val();
     $('companyInfoCard').style.display='block';
@@ -1538,13 +1553,14 @@ function showCompanyInfo(){
   });
 }
 
+/* ===== لوحة الرئيسية ===== */
 function refreshDashboard(){
   $('heroGreeting').textContent='أهلاً بيك يا '+(uname||'')+' 👋';
   $('accName').textContent=uname||'—';
-  cachedGet('rb_items').then(s=>{$('statItems').textContent=s.exists()?Object.keys(s.val()).length:0;});
-  cachedGet('rb_sales_invoices').then(s=>{$('statSales').textContent=s.exists()?Object.keys(s.val()).length:0;});
-  cachedGet('rb_purchase_invoices').then(s=>{$('statPurch').textContent=s.exists()?Object.keys(s.val()).length:0;});
-  cachedOnValue('rb_sales_invoices',snap=>{
+  get(ref(db,'rb_items')).then(s=>{$('statItems').textContent=s.exists()?Object.keys(s.val()).length:0;});
+  get(ref(db,'rb_sales_invoices')).then(s=>{$('statSales').textContent=s.exists()?Object.keys(s.val()).length:0;});
+  get(ref(db,'rb_purchase_invoices')).then(s=>{$('statPurch').textContent=s.exists()?Object.keys(s.val()).length:0;});
+  onValue(ref(db,'rb_sales_invoices'),snap=>{
     const box=$('recentActivity');
     if(!snap.exists()){box.innerHTML='<div class="empty-state"><div class="ei">🗂️</div><p>لا توجد بيانات بعد — حدّث البيانات من صفحة "حسابي"</p></div>';return;}
     const list=Object.values(snap.val()).sort((a,b)=>(b.invoiceNo||0)-(a.invoiceNo||0)).slice(0,5);
@@ -1555,69 +1571,10 @@ function refreshDashboard(){
   });
 }
 
-/* ===== مسح كل البيانات ===== */
-$('wipeDataBtn').addEventListener('click',async()=>{
-  if(!confirm('متأكد إنك عاوز تمسح كل البيانات نهائيًا؟ الخطوة دي مش هترجع.'))return;
-  const typed=prompt('اكتب كلمة "مسح" بالظبط للتأكيد النهائي:');
-  if(typed!=='مسح'){toast('❌ اتلغى المسح');return;}
-  try{
-    for(const p of RB_DATA_PATHS){await remove(ref(db,p));}
-    toast('✅ اتمسحت كل البيانات، الموقع رجع فاضي');
-    setTimeout(()=>location.reload(),1000);
-  }catch(e){
-    console.error(e);
-    toast('❌ حصل خطأ أثناء المسح، جرب تاني وانت متصل بالنت');
-  }
-});
-
-/* ===== حالة تشخيص الحفظ المحلي وحالة كل نوع بيانات ===== */
-async function renderOfflineDebug(){
-  const box=$('offlineDebugBody');if(!box)return;
-  box.innerHTML='<div style="color:var(--muted);">⏳ جاري فحص الحالة...</div>';
-
-  let storageWorks=false;
-  try{localStorage.setItem('rb_test_write','1');storageWorks=localStorage.getItem('rb_test_write')==='1';localStorage.removeItem('rb_test_write');}catch(e){storageWorks=false;}
-
-  const labelMap={
-    rb_customers:'👥 العملاء',rb_suppliers:'🚚 الموردين',rb_items:'📦 الأصناف',
-    rb_sales_invoices:'🧾 فواتير البيع',rb_purchase_invoices:'🧾 فواتير الشراء',
-    rb_warehouses:'🏬 المخازن',rb_treasury_info:'💰 بيانات الخزينة',
-    rb_cash_receipts:'📥 إذون الاستلام',rb_cash_payments:'📤 إذون الصرف',
-    rb_installment_collections:'💳 تحصيل الأقساط',rb_installment_payments:'💳 سداد الأقساط',
-    rb_transfer_vouchers:'🔁 التحويلات المخزنية',rb_basic_info:'🏢 بيانات المنشأة'
-  };
-
-  let rows='';
-  try{
-    const snaps=await Promise.all(RB_DATA_PATHS.map(p=>cachedGet(p)));
-    rows=RB_DATA_PATHS.map((p,i)=>{
-      const s=snaps[i];
-      const label=labelMap[p]||p;
-      if(!s.exists()){
-        return `<div class="bfield"><span class="bl">${label}</span><span class="bv" style="color:var(--danger);">❌ لسه فاضي</span></div>`;
-      }
-      const val=s.val();
-      const count=(p==='rb_treasury_info'||p==='rb_basic_info')?null:Object.keys(val||{}).length;
-      const info=count===null?'✅ متوفر':`✅ اتحدث (${count} سجل)`;
-      return `<div class="bfield"><span class="bl">${label}</span><span class="bv" style="color:var(--success);">${info}</span></div>`;
-    }).join('');
-  }catch(e){
-    console.error(e);
-    rows='<div style="color:var(--danger);">❌ حصل خطأ أثناء جلب الحالة، تأكد إنك متصل بالنت</div>';
-  }
-
-  box.innerHTML=`
-    <div class="bfield"><span class="bl">الحفظ المحلي شغال؟</span><span class="bv">${storageWorks?'✅ أيوة':'❌ لأ (مشكلة في المتصفح)'}</span></div>
-    <div class="bfield"><span class="bl">حالة الاتصال دلوقتي</span><span class="bv">${navigator.onLine?'🟢 أونلاين':'🔴 أوفلاين'}</span></div>
-    ${rows}`;
-}
-$('refreshDebugBtn').addEventListener('click',()=>{renderOfflineDebug();toast('🔄 اتحدثت الحالة');});
-
 function init(){
   uid=uid||localStorage.getItem('rb_uid')||'';
   uname=uname||localStorage.getItem('rb_name')||'';
   refreshDashboard();listenNotifs();refreshTreasuryBalance();showCompanyInfo();
-  renderOfflineDebug();
   setTimeout(requestNotifPermission,1500);
 }
 
